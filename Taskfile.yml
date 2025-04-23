@@ -1,0 +1,216 @@
+version: '3'
+
+tasks:
+  vendor:
+    desc: "Compile vendor folder"
+    cmds:
+      - "{{.EXEC_PHP}} composer install"
+      - "{{.EXEC_PHP}} touch vendor"
+    sources:
+      - composer.json
+      - composer.lock
+    vars:
+      EXEC_PHP:
+        sh: 'if [ "{{.DOCKER}}" = "true" ]; then echo "docker-compose exec -it php"; else echo ""; fi'
+
+  var:
+    desc: "Make sure that folder var exists"
+    cmds:
+      - mkdir -p var
+
+  up:
+    desc: "Run application via docker"
+    cmds:
+      - docker-compose up --detach --remove-orphans
+      - task: vendor
+    deps: [var]
+
+  down:
+    desc: "Stop docker application"
+    cmds:
+      - docker-compose down --remove-orphans
+
+  php:
+    desc: "Run container in PHP"
+    cmds:
+      - "{{.EXEC_PHP}} {{.CMD}}"
+    vars:
+      EXEC_PHP:
+        sh: 'if [ "{{.DOCKER}}" = "true" ]; then echo "docker-compose exec -it php"; else echo ""; fi'
+      CMD:
+        sh: 'echo "{{.CMD}}"'
+
+  restart:
+    desc: "Restart application"
+    cmds:
+      - task: down
+      - task: up
+
+  check:
+    desc: "Run all checkers"
+    cmds:
+      - task: composer-validate
+      - task: composer-audit
+      - task: lint
+      - task: rector
+      - task: phpstan
+      - task: type-check
+      - task: audit
+  #      - task: deptrac-app
+
+  type-check:
+    desc: "Run checker in typescript"
+    cmd: npm run check
+
+  fix:
+    desc: "Run all fixers"
+    cmds:
+      - task: fixcs
+      - task: lintfix
+      - task: rector-fix
+      - task: composer-normalize
+
+  composer-validate:
+    desc: "Validate composer.json and composer.lock using composer validate"
+    cmds:
+      - "{{.EXEC_PHP}} composer validate --strict --no-check-publish"
+
+  composer-unused:
+    desc: "Find all unused Composer dependencies using composer-unused"
+    cmds:
+      - "{{.EXEC_PHP}} composer unused"
+
+  composer-audit:
+    desc: "Try to find vulnerabilities in Composer using composer audit"
+    cmds:
+      - "{{.EXEC_PHP}} composer audit"
+
+  audit:
+    desc: "Find all vulnerabilities in front end and backend"
+    cmds:
+      - "{{.EXEC_PHP}} composer audit"
+#      - npm audit
+
+  generate:
+    desc: "Generate helper ide mockups"
+    cmds:
+      - "php artisan ide-helper:actions"
+
+  lint:
+    desc: "Check PHP code style using linter"
+    cmds:
+      - "{{.EXEC_PHP}} composer lint"
+    deps: [var, vendor]
+
+  lintfix:
+    desc: "Check JS code style using prettier"
+    cmds:
+      - "npm run format"
+
+  phpcs:
+    desc: "Check PHP code style using PHP CS Fixer"
+    cmds:
+      - "{{.EXEC_PHP}} composer phpcs-check"
+    deps: [var, vendor]
+
+  fixcs:
+    desc: "Fix PHP code style errors using PHP CS Fixer"
+    cmds:
+      - "{{.EXEC_PHP}} composer phpcs"
+    deps: [var, vendor]
+
+  phpstan:
+    desc: "Run full static PHP code analysis using PHPStan"
+    cmds:
+      - "{{.EXEC_PHP}} composer phpstan"
+    deps: [var, vendor]
+
+  rector:
+    desc: "Run php code analysis using Rector"
+    cmds:
+      - "{{.EXEC_PHP}} composer rector-check"
+    deps: [var, vendor]
+
+  rector-fix:
+    desc: "Run code fixing process using Rector"
+    cmds:
+      - "{{.EXEC_PHP}} composer rector"
+    deps: [var, vendor]
+
+  deptrac-directories:
+    desc: "Check layer dependencies"
+    cmds:
+      - "{{.EXEC_PHP}} composer deptrac"
+    deps: [var, vendor]
+
+  test:
+    desc: "Run phpunit tests"
+    cmds:
+      - "{{.EXEC_PHP}} composer test"
+
+  test-stop:
+    desc: "Run phpunit tests"
+    cmds:
+      - "./vendor/bin/phpunit --stop-on-error --stop-on-failure --colors=always"
+
+  testjs:
+    desc: "Run javascript tests"
+    cmd: "npm run test"
+
+  composer-normalize:
+    desc: "Normalize composer.json"
+    cmds:
+      - "{{.EXEC_PHP}} composer normalize"
+    deps: [vendor]
+
+  start:
+    desc: "Start application in octane"
+    cmd: "php artisan octane:start"
+
+  notstart:
+    desc: "Start Reverb notification server"
+    cmd: 'php artisan reverb:start --host="0.0.0.0" --port=8080'
+
+  start-dev:
+    desc: "Start application in dev mode"
+    cmd: "php artisan octane:start --watch"
+
+  clean:
+    desc: "Run all cleaning commands"
+    cmds:
+      - "php artisan optimize:clear"
+    vars:
+      IMPORT_LIMIT:
+        sh: 'echo "${IMPORT_LIMIT}"'
+
+  debug:
+    desc: "Run debug command"
+    cmd: "php artisan debug"
+
+  install:
+    desc: "Run installation process"
+    cmds:
+      - "php artisan key:generate"
+      - "php artisan config:clear"
+      - "php artisan migrate:fresh --seed"
+      - "php artisan db:seed --class=BotSeeder"
+
+  deploy:
+    desc: "Run deployment process"
+    cmds:
+      - "git pull"
+      - "composer install"
+      - "php artisan migrate"
+      - "php artisan config:clear"
+      - "php artisan cache:clear"
+      - "npm run build"
+      - "php artisan dependency:versions"
+      - "php artisan queue:restart"
+
+  work:
+    desc: "Run queue jobs"
+    cmd: "php artisan queue:work"
+
+  status:
+    desc: "Check status of queue"
+    cmd: "systemctl status laravel-parser"
