@@ -36,5 +36,13 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'linkace' => [
+        'token' => env('LINKACE_TOKEN'),
+        'url' => 'https://links.sergeyem.ru/api/v2',
+    ],
+    'easylist' => [
+        'token' => env('EASYLIST_TOKEN'),
+        'url' => 'https://easylist.sergeyem.ru/api/v1/',
+    ],
 
 ];
