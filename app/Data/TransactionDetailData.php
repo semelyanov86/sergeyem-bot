@@ -1,0 +1,75 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Data;
+
+use Spatie\LaravelData\Data;
+
+final class TransactionDetailData extends Data
+{
+    public function __construct(
+        public string $user,
+        public string $transaction_journal_id,
+        public string $type,
+        public string $date,
+        public int $order,
+        public string $currency_id,
+        public string $currency_code,
+        public string $currency_name,
+        public string $currency_symbol,
+        public int $currency_decimal_places,
+        public ?string $foreign_currency_id,
+        public ?string $foreign_currency_code,
+        public ?string $foreign_currency_symbol,
+        public int $foreign_currency_decimal_places,
+        public string $amount,
+        public ?string $foreign_amount,
+        public string $description,
+        public string $source_id,
+        public string $source_name,
+        public string $source_iban,
+        public string $source_type,
+        public string $destination_id,
+        public string $destination_name,
+        public ?string $destination_iban,
+        public string $destination_type,
+        public string $budget_id,
+        public string $budget_name,
+        public string $category_id,
+        public string $category_name,
+        public ?string $bill_id,
+        public ?string $bill_name,
+        public bool $reconciled,
+        public ?string $notes,
+        /** @var string[] */
+        public array $tags,
+        public ?string $internal_reference,
+        public ?string $external_id,
+        public string $original_source,
+        public ?string $recurrence_id,
+        public ?string $recurrence_total,
+        public ?string $recurrence_count,
+        public ?string $bunq_payment_id,
+        public ?string $external_url,
+        public string $import_hash_v2,
+        public ?string $sepa_cc,
+        public ?string $sepa_ct_op,
+        public ?string $sepa_ct_id,
+        public ?string $sepa_db,
+        public ?string $sepa_country,
+        public ?string $sepa_ep,
+        public ?string $sepa_ci,
+        public ?string $sepa_batch_id,
+        public ?string $interest_date,
+        public ?string $book_date,
+        public ?string $process_date,
+        public ?string $due_date,
+        public ?string $payment_date,
+        public ?string $invoice_date,
+        public ?float $longitude,
+        public ?float $latitude,
+        public ?int $zoom_level,
+        public bool $has_attachments,
+    ) {}
+}

@@ -48,4 +48,9 @@ return [
         'url' => 'https://easywordsapp.ru/api',
         'token' => env('EASYWORDS_TOKEN'),
     ],
+
+    'firefly' => [
+        'server' => env('FIREFLY_SERVER', 'https://finance.sergeyem.ru/api/v1'),
+        'token' => env('FIREFLY_TOKEN'),
+    ],
 ];
