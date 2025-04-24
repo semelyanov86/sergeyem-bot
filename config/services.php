@@ -44,5 +44,8 @@ return [
         'token' => env('EASYLIST_TOKEN'),
         'url' => 'https://easylist.sergeyem.ru/api/v1/',
     ],
-
+    'easywords' => [
+        'url' => 'https://easywordsapp.ru/api',
+        'token' => env('EASYWORDS_TOKEN'),
+    ],
 ];
