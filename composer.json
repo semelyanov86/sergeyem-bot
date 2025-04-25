@@ -8,17 +8,17 @@
         "framework"
     ],
     "require": {
-        "php": "^8.2",
+        "php": "^8.3",
         "defstudio/telegraph": "^1.59",
         "inertiajs/inertia-laravel": "^2.0.2",
-        "laravel/framework": "^12.10",
-        "laravel/octane": "^2.9",
+        "laravel/framework": "^12.10.2",
+        "laravel/octane": "^2.9.1",
         "laravel/tinker": "^2.10.1",
         "lorisleiva/laravel-actions": "^2.9",
         "spatie/laravel-data": "^4.15.1",
         "spatie/laravel-ray": "^1.40.2",
-        "spiral/roadrunner-cli": "^2.6.0",
-        "spiral/roadrunner-http": "^3.3.0",
+        "spiral/roadrunner-cli": "^2.7.1",
+        "spiral/roadrunner-http": "^3.5.1",
         "tightenco/ziggy": "^2.5.2"
     },
     "require-dev": {

@@ -11,3 +11,6 @@ Route::get('dashboard', fn () => Inertia::render('Dashboard'))->middleware(['aut
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
+
+Route::post('/subscribe', [\App\Http\Controllers\MainController::class, 'subscribe'])->name('subscribe');
+Route::post('/subscribe/sergeyem', [\App\Http\Controllers\MainController::class, 'subscribeSergey'])->name('subscribe.sergeyem');

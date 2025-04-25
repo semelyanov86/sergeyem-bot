@@ -80,6 +80,6 @@ final class LinkAceConnector
         /** @var string $token */
         $token = config('services.linkace.token');
 
-        return Http::withToken($token)->asJson();
+        return Http::withToken($token)->acceptJson()->asJson();
     }
 }

@@ -23,6 +23,11 @@ return Application::configure(basePath: dirname(__DIR__))
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
         ]);
+
+        $middleware->validateCsrfTokens(except: [
+            'subscribe/*',
+            'subscribe',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

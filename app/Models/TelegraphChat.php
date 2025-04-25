@@ -9,6 +9,7 @@ use DefStudio\Telegraph\Models\TelegraphChat as Chat;
 
 /**
  * @property array<string, scalar> $context
+ * @property ChatStateEnum $state
  */
 class TelegraphChat extends Chat
 {
