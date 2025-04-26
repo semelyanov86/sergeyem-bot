@@ -6,6 +6,7 @@ namespace App\Telegram;
 
 use App\Enums\ChatStateEnum;
 use App\Services\WebsiteConnector;
+use Illuminate\Support\Stringable;
 
 trait GeneralInfoTrait
 {
@@ -46,7 +47,7 @@ trait GeneralInfoTrait
         $this->chat->state = ChatStateEnum::ACTIVE;
         $this->chat->context = [];
         $this->chat->save();
-        $this->reply('Контекст пользователя успешно сброшен');
+        $this->chat->message('Контекст пользователя успешно сброшен')->removeReplyKeyboard()->send();
     }
 
     public function me(): void
@@ -65,5 +66,13 @@ trait GeneralInfoTrait
         $msg .= '- TGID: ' . $profile->telegram_id . PHP_EOL;
         $msg .= '- Telegram: ' . $profile->telegram_login . PHP_EOL;
         $this->reply($msg);
+    }
+
+    /**
+     * @param  array<string, mixed>|null  $context
+     */
+    protected function active(Stringable $text, ?array $context): void
+    {
+        $this->chat->message('Подобное взаимодействие с ботом не поддерживается. Для получения списка доступных команд, введите /help.')->removeReplyKeyboard()->send();
     }
 }

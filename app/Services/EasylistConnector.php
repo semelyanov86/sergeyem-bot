@@ -6,7 +6,9 @@ namespace App\Services;
 
 use App\Data\EasylistItemData;
 use App\Data\EasylistListData;
+use Illuminate\Database\RecordNotFoundException;
 use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 
 final class EasylistConnector
@@ -37,6 +39,9 @@ final class EasylistConnector
         $url = config('services.easylist.url');
 
         $response = $this->getRequest()->get($url . '/lists/' . $listId . '/items');
+        if ($response->status() === Response::HTTP_NOT_FOUND) {
+            throw new RecordNotFoundException('Provided list not found');
+        }
         if (! $response->ok()) {
             throw new \DomainException('Can not get items: ' . $response->body());
         }

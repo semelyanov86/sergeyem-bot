@@ -34,12 +34,13 @@ final class EasywordsConnector
         /** @var string $url */
         $url = config('services.easywords.url');
 
-        $response = $this->getRequest()->post($url . '/words', [$word->toArray()]);
+        $response = $this->getRequest()->post($url . '/words', $word->toArray());
+        ray($response->json(), $word->toArray(), $url . '/words');
         if ($response->clientError() || $response->serverError()) {
             throw new \DomainException('Can not save word: ' . $response->body());
         }
 
-        return WordData::from($response->json());
+        return WordData::from($response->json('data'));
     }
 
     protected function getRequest(): PendingRequest
@@ -47,6 +48,6 @@ final class EasywordsConnector
         /** @var string $token */
         $token = config('services.easywords.token');
 
-        return Http::withToken($token)->asJson();
+        return Http::withToken($token)->asJson()->acceptJson();
     }
 }
