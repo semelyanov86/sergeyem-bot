@@ -18,7 +18,7 @@ final class BotSeeder extends Seeder
         ]);
         TelegraphChat::create([
             'chat_id' => '303437427',
-            'name' => '[private] sergeyem',
+            'name' => '@sergeyem',
             'telegraph_bot_id' => $bot->id,
         ]);
     }

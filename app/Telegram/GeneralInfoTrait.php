@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Telegram;
 
 use App\Enums\ChatStateEnum;
+use App\Services\WebsiteConnector;
 
 trait GeneralInfoTrait
 {
@@ -31,7 +32,7 @@ trait GeneralInfoTrait
 
 Чтобы сохранить слово, наберите команду /saveword . После этого мы спросим вас оригинальное значение слова, его перевод и язык.
 
-Для получения информации по вашему пользователю (часто нужно для интеграции со сторонними системами), отправьте команду /my 😎
+Для получения информации по вашему пользователю (часто нужно для интеграции со сторонними системами), отправьте команду /me 😎
 
 Для получения всех список сервиса EasyList, нужно передать команду /buylist , которая принимает в качестве параметра количество элементов в сообщении
 
@@ -46,5 +47,23 @@ trait GeneralInfoTrait
         $this->chat->context = [];
         $this->chat->save();
         $this->reply('Контекст пользователя успешно сброшен');
+    }
+
+    public function me(): void
+    {
+        $service = app(WebsiteConnector::class);
+        $profile = $service->getProfileInfo();
+        $msg = 'Данные по текущему пользователю:' . PHP_EOL;
+        $msg .= '- Имя: ' . $profile->name . PHP_EOL;
+        $msg .= '- Email: ' . $profile->email . PHP_EOL;
+        $msg .= '- Номер телефона: ' . $profile->phone . PHP_EOL;
+        $msg .= '- Основной телефон: ' . $profile->main_phone . PHP_EOL;
+        $msg .= '- VK: ' . $profile->vk . PHP_EOL;
+        $msg .= '- Youtube: ' . $profile->youtube . PHP_EOL;
+        $msg .= '- Facebook: ' . $profile->facebook . PHP_EOL;
+        $msg .= '- Адрес: ' . $profile->address . PHP_EOL;
+        $msg .= '- TGID: ' . $profile->telegram_id . PHP_EOL;
+        $msg .= '- Telegram: ' . $profile->telegram_login . PHP_EOL;
+        $this->reply($msg);
     }
 }
