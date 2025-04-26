@@ -24,6 +24,7 @@ final class TelegraphRegisterCommandsCommand extends Command
             'cancel' => 'Сброс контекста пользователя',
             'link' => 'Сохранение ссылки. Вместе с командой нужно передать ссылку',
             'links' => 'Получить последние сохранённые ссылки',
+            'buylists' => 'Выводит списки покупок из Easylist',
         ])->send();
     }
 }

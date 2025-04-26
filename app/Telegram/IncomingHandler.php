@@ -12,6 +12,7 @@ use DefStudio\Telegraph\Handlers\WebhookHandler;
  */
 final class IncomingHandler extends WebhookHandler
 {
+    use EasylistTelegramTrait;
     use GeneralInfoTrait;
     use LinkAceTelegramTrait;
 }
