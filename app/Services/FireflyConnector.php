@@ -13,6 +13,7 @@ use App\Data\FireflySummaryBasicData;
 use App\Data\FireflyTransactionCreateData;
 use App\Data\TransactionData;
 use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 
@@ -64,7 +65,7 @@ final class FireflyConnector
      */
     public function getAccounts(): array
     {
-        $response = $this->getRequest()->get($this->getServer() . '/accounts');
+        $response = $this->getRequest()->get($this->getServer() . '/accounts?limit=100');
 
         if (! $response->ok()) {
             throw new \DomainException('Can not get firefly accounts: ' . $response->body());
@@ -100,11 +101,11 @@ final class FireflyConnector
     /**
      * @return array<non-empty-string, FireflySummaryBasicData>
      */
-    public function getBalance(): array
+    public function getBalance(CarbonImmutable $carbon): array
     {
         $response = $this->getRequest()->get($this->getServer() . '/summary/basic', [
-            'start' => now()->startOfMonth()->format('Y-m-d'),
-            'end' => now()->format('Y-m-d'),
+            'start' => $carbon->startOfMonth()->format('Y-m-d'),
+            'end' => $carbon->endOfMonth()->format('Y-m-d'),
         ]);
 
         if (! $response->ok()) {
@@ -190,6 +191,23 @@ final class FireflyConnector
 
         // @phpstan-ignore-next-line
         return FireflyCategoryExpenseData::collect($response->json(), 'array');
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function getAccountValuesByType(string $type): array
+    {
+        $accounts = $this->getAccounts();
+        $result = [];
+
+        foreach ($accounts as $account) {
+            if ($account->attributes->type === $type) {
+                $result[$account->id] = $account->attributes->name;
+            }
+        }
+
+        return $result;
     }
 
     public function sendTransaction(FireflyTransactionCreateData $data): int

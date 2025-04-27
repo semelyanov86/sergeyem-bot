@@ -15,6 +15,7 @@ final class IncomingHandler extends WebhookHandler
 {
     use EasylistTelegramTrait;
     use EasywordsTelegramTrait;
+    use FireflyTelegramBotTrait;
     use GeneralInfoTrait;
     use LinkAceTelegramTrait;
 

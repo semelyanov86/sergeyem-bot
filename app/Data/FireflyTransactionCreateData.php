@@ -17,7 +17,7 @@ final class FireflyTransactionCreateData extends Data
         public int $category_id,
         public int $source_id,
         public int $destination_id,
-        public int $budget_id,
+        public ?int $budget_id = null,
         public Carbon $date = new Carbon(),
     ) {}
 }
