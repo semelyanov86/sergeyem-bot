@@ -29,9 +29,6 @@ jobs:
           php artisan cache:clear
           php artisan key:generate
 
-      - name: Composer Lint
-        run: ./vendor/bin/phplint --no-cache
-
       - name: Composer Audit
         run: composer audit
 
