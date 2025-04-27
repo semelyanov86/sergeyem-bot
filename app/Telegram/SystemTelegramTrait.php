@@ -55,7 +55,7 @@ trait SystemTelegramTrait
         $msg .= PHP_EOL;
         $msg .= PHP_EOL;
         $cbr = app(CbrRates::class)->handle();
-        $msg .= '<b>Курс валют ЦБРФ на ' . $cbr['date'] . '</b>';
+        $msg .= '<b>Курс валют ЦБРФ на ' . $cbr['date'] . '</b>' . PHP_EOL;
         $msg .= '- USD: ' . $cbr['rates']['USD']->value . PHP_EOL;
         $msg .= '- EUR: ' . $cbr['rates']['EUR']->value . PHP_EOL;
         $msg .= '- PLN: ' . $cbr['rates']['PLN']->value . PHP_EOL;
