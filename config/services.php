@@ -67,4 +67,9 @@ return [
             'https://easywordsapp.ru/#/login' => '<link rel="stylesheet" href="https://easywordsapp.ru/build/assets',
         ],
     ],
+    'currency' => [
+        'eur_url' => env('CURRENCY_RATE_URL'),
+        'eur_key' => env('CURRENCY_RATE_KEY'),
+        'cbr_url' => 'https://www.cbr.ru/scripts/XML_daily.asp',
+    ],
 ];
