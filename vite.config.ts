@@ -11,6 +11,7 @@ export default defineConfig({
             input: ['resources/js/app.ts'],
             ssr: 'resources/js/ssr.ts',
             refresh: true,
+            publicDirectory: "public_html",
         }),
         tailwindcss(),
         vue({
