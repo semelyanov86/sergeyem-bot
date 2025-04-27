@@ -13,13 +13,13 @@ trait SystemTelegramTrait
     public function check(): void
     {
         $this->chat->action(ChatActions::TYPING)->send();
-        $msg = 'Результат проверки наших сайтов:' . PHP_EOL;
+        $msg = '<b>Результат проверки наших сайтов:</b>' . PHP_EOL;
         /** @var array<string, string> $websites */
         $websites = config('services.checker.websites');
 
         foreach ($websites as $link => $website) {
             $result = WebsiteChecker::run($link, $website);
-            $msg .= '- ' . $link . ': ';
+            $msg .= '- <u>' . $link . '</u>: ';
             if ($result->status === Response::HTTP_OK) {
                 $msg .= 'OK ';
             } else {
