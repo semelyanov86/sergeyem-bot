@@ -53,10 +53,10 @@ import { Head } from '@inertiajs/vue3';
                 <div class="flex justify-center">
                     <ul class="w-full max-w-2xl divide-y divide-gray-100 rounded-xl bg-gray-50 shadow">
                         <li class="flex items-center px-6 py-4"><span class="mr-4 font-mono text-blue-600">/help</span> — список доступных команд</li>
-                        <li class="flex items-center px-6 py-4"><span class="mr-4 font-mono text-blue-600">/budget</span> — список бюджетов</li>
+                        <li class="flex items-center px-6 py-4"><span class="mr-4 font-mono text-blue-600">/budgets</span> — список бюджетов</li>
                         <li class="flex items-center px-6 py-4"><span class="mr-4 font-mono text-blue-600">/balance</span> — баланс по финансам</li>
                         <li class="flex items-center px-6 py-4">
-                            <span class="mr-4 font-mono text-blue-600">/minus</span> — зарегистрировать расходную операцию
+                            <span class="mr-4 font-mono text-blue-600">/expense</span> — зарегистрировать расходную операцию
                         </li>
                         <li class="flex items-center px-6 py-4">
                             <span class="mr-4 font-mono text-blue-600">/transfer</span> — перевод между счетами
@@ -67,6 +67,41 @@ import { Head } from '@inertiajs/vue3';
                         </li>
                         <li class="flex items-center px-6 py-4">
                             <span class="mr-4 font-mono text-blue-600">/categories</span> — статистика по категориям
+                        </li>
+                        <li class="flex items-center px-6 py-4">
+                            <span class="mr-4 font-mono text-blue-600">/budgets</span> — статистика по бюджетам
+                        </li>
+                        <li class="flex items-center px-6 py-4">
+                            <span class="mr-4 font-mono text-blue-600">/start</span> — Зарегистрироваться в сервисе
+                        </li>
+                        <li class="flex items-center px-6 py-4"><span class="mr-4 font-mono text-blue-600">/cancel</span> — Сбросить контекст</li>
+                        <li class="flex items-center px-6 py-4">
+                            <span class="mr-4 font-mono text-blue-600">/link</span> — Сохранить ссылку в linkace
+                        </li>
+                        <li class="flex items-center px-6 py-4">
+                            <span class="mr-4 font-mono text-blue-600">/links</span> — Получить последние ссылки
+                        </li>
+                        <li class="flex items-center px-6 py-4">
+                            <span class="mr-4 font-mono text-blue-600">/listlinks</span> — Вывести ссылки из определённого списка
+                        </li>
+                        <li class="flex items-center px-6 py-4">
+                            <span class="mr-4 font-mono text-blue-600">/buylists</span> — Вывести список покупок
+                        </li>
+                        <li class="flex items-center px-6 py-4">
+                            <span class="mr-4 font-mono text-blue-600">/items</span> — Выводит товары из заданного списка
+                        </li>
+                        <li class="flex items-center px-6 py-4">
+                            <span class="mr-4 font-mono text-blue-600">/random</span> — Выводит рандомные слова для изучения
+                        </li>
+                        <li class="flex items-center px-6 py-4">
+                            <span class="mr-4 font-mono text-blue-600">/saveword</span> — Запускает процесс сохранения слов
+                        </li>
+                        <li class="flex items-center px-6 py-4">
+                            <span class="mr-4 font-mono text-blue-600">/delete</span> — Удаляет транзакцию по идентификатору
+                        </li>
+                        <li class="flex items-center px-6 py-4"><span class="mr-4 font-mono text-blue-600">/rates</span> — Выводит курсы валют</li>
+                        <li class="flex items-center px-6 py-4">
+                            <span class="mr-4 font-mono text-blue-600">/check</span> — Проверяет соединение с сайтами
                         </li>
                     </ul>
                 </div>

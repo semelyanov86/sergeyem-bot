@@ -36,6 +36,8 @@ final class TelegraphRegisterCommandsCommand extends Command
             'budgets' => 'Общая статистика по бюджетам',
             'expense' => 'Создание новой расходной транзакции',
             'delete' => 'Удаление транзакции по ИД',
+            'rates' => 'Показывает курсы валют',
+            'check' => 'Проверяет соединение с сайтами',
         ])->send();
     }
 }

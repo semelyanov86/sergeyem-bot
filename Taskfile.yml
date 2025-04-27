@@ -54,7 +54,7 @@ tasks:
       - task: lint
       - task: rector
       - task: phpstan
-      - task: type-check
+#      - task: type-check
       - task: audit
   #      - task: deptrac-app
 

@@ -19,16 +19,29 @@ A personal Telegram bot for managing finances, budgets, shopping lists, and book
 
 ## ⚡️ Available Commands
 
-| Command         | Description                           |
-|-----------------|--------------------------------------|
-| `/help`         | Show the list of available commands   |
-| `/budget`       | Display your list of budgets          |
-| `/balance`      | Show current balances                 |
-| `/minus`        | Register an expense                   |
-| `/transfer`     | Transfer funds between accounts       |
-| `/accounts`     | List all available accounts           |
-| `/transactions` | Show recent transactions              |
-| `/categories`   | View statistics by categories         |
+| Command         | Description                         |
+|-----------------|-------------------------------------|
+| `/help`         | Show the list of available commands |
+| `/budget`       | Display your list of budgets        |
+| `/balance`      | Show current balances               |
+| `/minus`        | Register an expense                 |
+| `/transfer`     | Transfer funds between accounts     |
+| `/accounts`     | List all available accounts         |
+| `/transactions` | Show recent transactions            |
+| `/categories`   | View statistics by categories       |
+| `/budgets`      | View statistics by budgets          |
+| `/start`        | Register user                       |
+| `/cancel`       | Delete user context                 |
+| `/link`         | Save link in linkace                |
+| `/links`        | Display latest links                |
+| `/listlinks`    | Show links from specific list       |
+| `/buylists`     | Display buying list                 |
+| `/items`        | Display shopping items              |
+| `/random`       | Displays random words for learning  |
+| `/saveword`     | Save word for future learning       |
+| `/delete`       | Delete financial transaction by id  |
+| `/rates`        | Show currency exchange rates        |
+| `/check`        | Checking connection to websites     |
 
 ---
 
