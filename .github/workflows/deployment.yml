@@ -44,7 +44,7 @@ jobs:
         run: npm install
 
       - name: Build Vue.js
-        run: npm run prod
+        run: npm run build
 
       - name: Run PHPUnit Tests
         run: ./vendor/bin/phpunit --colors=always
