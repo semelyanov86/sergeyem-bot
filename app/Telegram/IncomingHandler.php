@@ -18,6 +18,7 @@ final class IncomingHandler extends WebhookHandler
     use FireflyTelegramBotTrait;
     use GeneralInfoTrait;
     use LinkAceTelegramTrait;
+    use SystemTelegramTrait;
 
     #[\Override]
     protected function handleChatMessage(Stringable $text): void

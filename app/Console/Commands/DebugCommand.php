@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Services\FireflyConnector;
-use Carbon\CarbonImmutable;
+use App\Actions\CbrRates;
 use Illuminate\Console\Command;
 
 final class DebugCommand extends Command
@@ -16,7 +15,7 @@ final class DebugCommand extends Command
 
     public function handle(): void
     {
-        ray(app(FireflyConnector::class)->getBalance(new CarbonImmutable()));
+        ray(CbrRates::run());
         $this->info('Command executed successfully');
     }
 }

@@ -1,0 +1,74 @@
+name: Continuous Integration and Deployment
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
+      - name: Install Dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
+
+      - name: Setup Laravel
+        run: |
+          cp .env.example .env
+          php artisan config:clear
+          php artisan cache:clear
+          php artisan key:generate
+
+      - name: Composer Audit
+        run: composer audit
+
+      - name: Composer Validate
+        run: composer validate --no-check-all --strict
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '22'
+
+      - name: Install Node.js Dependencies
+        run: npm install
+
+      - name: Build Vue.js
+        run: npm run build
+
+      - name: Run PHPUnit Tests
+        run: ./vendor/bin/phpunit --colors=always
+
+      - name: Lint PHP Code
+        run: ./vendor/bin/pint --test
+
+  deploy:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH and git pull
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.TIMEWEB_HOST }}
+          username: ${{ secrets.TIMEWEB_USER }}
+          key: ${{ secrets.TIMEWEB_SSH_KEY }}
+          port: 22
+          script: |
+            cd ~/bot
+            git pull origin main
+            /opt/php83/bin/php composer.phar install --no-interaction --prefer-dist --optimize-autoloader
+            /opt/php83/bin/php artisan migrate --force
+            /opt/php83/bin/php artisan config:cache
+            /opt/php83/bin/php artisan route:cache
+            /opt/php83/bin/php artisan view:cache
+            /opt/php83/bin/php artisan cache:clear
