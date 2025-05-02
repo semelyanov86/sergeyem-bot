@@ -132,7 +132,7 @@ final class FireflyConnector
         $response = $this->getRequest()->get($this->getServer() . '/transactions', [
             'start' => Carbon::now()->subDays(4)->format('Y-m-d'),
             'end' => Carbon::tomorrow()->format('Y-m-d'),
-            'type' => TransactionTypeEnum::WITHDRAWAL,
+            'type' => TransactionTypeEnum::WITHDRAWAL->value,
         ]);
 
         if (! $response->ok()) {
