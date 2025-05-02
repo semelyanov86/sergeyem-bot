@@ -28,7 +28,7 @@ final class TransactionDetailData extends Data
         public string $description,
         public string $source_id,
         public string $source_name,
-        public string $source_iban,
+        public ?string $source_iban,
         public string $source_type,
         public string $destination_id,
         public string $destination_name,
