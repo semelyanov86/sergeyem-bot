@@ -12,6 +12,7 @@ use App\Data\FireflyCurrencyData;
 use App\Data\FireflySummaryBasicData;
 use App\Data\FireflyTransactionCreateData;
 use App\Data\TransactionData;
+use App\Enums\TransactionTypeEnum;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\Client\PendingRequest;
@@ -131,6 +132,7 @@ final class FireflyConnector
         $response = $this->getRequest()->get($this->getServer() . '/transactions', [
             'start' => Carbon::now()->subDays(4)->format('Y-m-d'),
             'end' => Carbon::tomorrow()->format('Y-m-d'),
+            'type' => TransactionTypeEnum::WITHDRAWAL,
         ]);
 
         if (! $response->ok()) {
