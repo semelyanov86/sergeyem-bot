@@ -34,7 +34,7 @@ final class FireflyAccountAttributesData extends Data
         public ?string $bic,
         public string $virtual_balance,
         public ?string $native_virtual_balance,
-        public string $opening_balance,
+        public ?string $opening_balance,
         public ?string $native_opening_balance,
         public ?string $opening_balance_date,
         public ?string $liability_type,
