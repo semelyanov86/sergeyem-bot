@@ -9,8 +9,8 @@ use Spatie\LaravelData\Data;
 final class FireflyCategoryAttributeData extends Data
 {
     /**
-     * @param  FireflyAmountData[]  $spent
-     * @param  FireflyAmountData[]  $earned
+     * @param  FireflyAmountData[]|null  $spent
+     * @param  FireflyAmountData[]|null  $earned
      */
     public function __construct(
         public string $name,
@@ -18,7 +18,7 @@ final class FireflyCategoryAttributeData extends Data
         public ?string $native_currency_id,
         public ?string $native_currency_code,
         public ?string $natice_currency_symbol,
-        public array $spent,
-        public array $earned,
+        public ?array $spent,
+        public ?array $earned,
     ) {}
 }
