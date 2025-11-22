@@ -9,7 +9,7 @@ use Spatie\LaravelData\Data;
 final class FireflyBudgetAttributesData extends Data
 {
     /**
-     * @param  FireflyAmountData[]  $spent
+     * @param  FireflyAmountData[]|null  $spent
      */
     public function __construct(
         public string $name,
@@ -21,6 +21,6 @@ final class FireflyBudgetAttributesData extends Data
         public ?string $currency_id,
         public ?string $currency_code,
         public ?string $auto_budget_amount,
-        public array $spent,
+        public ?array $spent,
     ) {}
 }
