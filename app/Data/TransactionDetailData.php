@@ -22,7 +22,7 @@ final class TransactionDetailData extends Data
         public ?string $foreign_currency_id,
         public ?string $foreign_currency_code,
         public ?string $foreign_currency_symbol,
-        public int $foreign_currency_decimal_places,
+        public ?int $foreign_currency_decimal_places,
         public string $amount,
         public ?string $foreign_amount,
         public string $description,
