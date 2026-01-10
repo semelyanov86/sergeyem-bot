@@ -14,7 +14,7 @@ trait EasylistTelegramTrait
     {
         $msg = 'Списки из сервиса Easylist' . PHP_EOL;
         $this->chat->action(ChatActions::TYPING)->send();
-        $linkService = app(EasylistConnector::class);
+        $linkService = resolve(EasylistConnector::class);
         $links = $linkService->getLists();
         foreach ($links as $link) {
             $msg .= $link->id . '. <b>' . $link->attributes->name . '</b> (' . $link->attributes->items_count . ')' . PHP_EOL;
@@ -31,7 +31,7 @@ trait EasylistTelegramTrait
             return;
         }
         try {
-            $items = app(EasylistConnector::class)->getListItems((int) $id);
+            $items = resolve(EasylistConnector::class)->getListItems((int) $id);
         } catch (RecordNotFoundException) {
             $this->reply('Список, который вы предоставили не верный. Введите корректный идентификатор');
 

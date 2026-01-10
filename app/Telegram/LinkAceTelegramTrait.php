@@ -13,7 +13,7 @@ trait LinkAceTelegramTrait
     public function link(string $text): void
     {
         $this->chat->action(ChatActions::TYPING)->send();
-        $linkService = app(LinkAceConnector::class);
+        $linkService = resolve(LinkAceConnector::class);
         $result = $linkService->createLink($text);
         $this->reply("Ссылка была успешно добавлена. Её идентификатор: {$result->id}. Заголовок страницы: {$result->title}");
     }
@@ -22,7 +22,7 @@ trait LinkAceTelegramTrait
     {
         $msg = 'Ваши последние сохранённые ссылки из всех категорий 👇 ' . PHP_EOL;
         $this->chat->action(ChatActions::TYPING)->send();
-        $linkService = app(LinkAceConnector::class);
+        $linkService = resolve(LinkAceConnector::class);
         $perPage = 6;
         if ($text) {
             $perPage = (int) $text;
@@ -38,7 +38,7 @@ trait LinkAceTelegramTrait
     {
         $msg = 'Выберите список, в котором вы хотите посмотреть ссылки ⌨️';
         $this->chat->action(ChatActions::TYPING)->send();
-        $linkService = app(LinkAceConnector::class);
+        $linkService = resolve(LinkAceConnector::class);
         $lists = $linkService->getLists();
 
         $this->chat->message($msg)->keyboard(function (Keyboard $keyboard) use ($lists) {
@@ -55,7 +55,7 @@ trait LinkAceTelegramTrait
     {
         $msg = "Последние ссылки из списка {$id} 👉 " . PHP_EOL;
         $this->chat->action(ChatActions::TYPING)->send();
-        $linkService = app(LinkAceConnector::class);
+        $linkService = resolve(LinkAceConnector::class);
         $links = $linkService->getLinksFromList((int) $id);
         foreach ($links as $key => $link) {
             $msg .= $key + 1 . '. ' . $link->title . ' -> ' . $link->url . PHP_EOL;

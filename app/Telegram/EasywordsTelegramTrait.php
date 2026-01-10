@@ -22,7 +22,7 @@ trait EasywordsTelegramTrait
             $number = 10;
         }
         $number = (int) $number;
-        $words = app(EasywordsConnector::class)->getRandomWords($number);
+        $words = resolve(EasywordsConnector::class)->getRandomWords($number);
         foreach ($words as $key => $word) {
             $msg .= $key + 1 . '. <b>' . $word->original . '</b> - ' . $word->translated . PHP_EOL;
         }
@@ -93,7 +93,7 @@ trait EasywordsTelegramTrait
         $this->chat->state = ChatStateEnum::ACTIVE;
         $this->chat->context = [];
         $this->chat->save();
-        $result = app(EasywordsConnector::class)->saveWord(CreateWordData::from($context));
+        $result = resolve(EasywordsConnector::class)->saveWord(CreateWordData::from($context));
         $this->chat->message('Слово успешно сохранено под идентификатором ' . $result->id)->removeReplyKeyboard()->send();
     }
 }

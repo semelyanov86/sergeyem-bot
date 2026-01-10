@@ -66,7 +66,7 @@ trait GeneralInfoTrait
 
     public function me(): void
     {
-        $service = app(WebsiteConnector::class);
+        $service = resolve(WebsiteConnector::class);
         $profile = $service->getProfileInfo();
         $msg = 'Данные по текущему пользователю:' . PHP_EOL;
         $msg .= '- Имя: ' . $profile->name . PHP_EOL;

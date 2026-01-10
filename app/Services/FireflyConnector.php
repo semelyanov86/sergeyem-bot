@@ -116,6 +116,7 @@ final class FireflyConnector
         // @phpstan-ignore-next-line
         foreach ($response->json() as $key => $item) {
             if ($key) {
+                // @phpstan-ignore-next-line
                 $result[$key] = FireflySummaryBasicData::from($item);
             }
         }
@@ -130,8 +131,8 @@ final class FireflyConnector
     public function getTransactions(): array
     {
         $response = $this->getRequest()->get($this->getServer() . '/transactions', [
-            'start' => Carbon::now()->subDays(4)->format('Y-m-d'),
-            'end' => Carbon::tomorrow()->format('Y-m-d'),
+            'start' => \Illuminate\Support\Facades\Date::now()->subDays(4)->format('Y-m-d'),
+            'end' => \Illuminate\Support\Facades\Date::tomorrow()->format('Y-m-d'),
             'type' => TransactionTypeEnum::WITHDRAWAL->value,
         ]);
 
@@ -150,10 +151,10 @@ final class FireflyConnector
     public function getCategoriesStat(?string $start = null, ?string $end = null): array
     {
         if (! $start) {
-            $start = Carbon::now()->firstOfMonth()->format('Y-m-d');
+            $start = \Illuminate\Support\Facades\Date::now()->firstOfMonth()->format('Y-m-d');
         }
         if (! $end) {
-            $end = Carbon::now()->format('Y-m-d');
+            $end = \Illuminate\Support\Facades\Date::now()->format('Y-m-d');
         }
 
         $response = $this->getRequest()->get($this->getServer() . '/insight/expense/category', [
@@ -176,10 +177,10 @@ final class FireflyConnector
     public function getBudgetStat(?string $start = null, ?string $end = null): array
     {
         if (! $start) {
-            $start = Carbon::now()->firstOfMonth()->format('Y-m-d');
+            $start = \Illuminate\Support\Facades\Date::now()->firstOfMonth()->format('Y-m-d');
         }
         if (! $end) {
-            $end = Carbon::now()->format('Y-m-d');
+            $end = \Illuminate\Support\Facades\Date::now()->format('Y-m-d');
         }
 
         $response = $this->getRequest()->get($this->getServer() . '/insight/expense/budget', [

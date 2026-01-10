@@ -73,4 +73,44 @@ final class MainController extends Controller
             return response()->json($exception->getMessage(), 200);
         }
     }
+
+    public function meeting(Request $request, DataBuilderService $builderService): Response
+    {
+        $token = $request->header('token');
+        if ($token !== config('app.api_token')) {
+            abort(401, 'Unauthorized');
+        }
+
+        $data = $request->all();
+
+        if (! isset($data['action']) || $data['action'] !== 'appointment_save') {
+            abort(400, 'Invalid action');
+        }
+
+        $payload = $data['payload'] ?? [];
+
+        $msg = '<b>📅 Новая встреча назначена!</b>' . PHP_EOL;
+        $msg .= 'ID: ' . $payload['id'] . PHP_EOL;
+        $msg .= 'Статус: ' . $payload['status'] . PHP_EOL;
+        $msg .= 'Начало: ' . $payload['start_datetime'] . PHP_EOL;
+        $msg .= 'Конец: ' . $payload['end_datetime'] . PHP_EOL;
+        $msg .= 'Provider ID: ' . $payload['id_users_provider'] . PHP_EOL;
+        $msg .= 'Customer ID: ' . $payload['id_users_customer'] . PHP_EOL;
+
+        if (! empty($payload['id_services'])) {
+            $msg .= 'Service ID: ' . $payload['id_services'] . PHP_EOL;
+        }
+
+        if (! empty($payload['notes'])) {
+            $msg .= 'Заметки: ' . $payload['notes'] . PHP_EOL;
+        }
+
+        if (! empty($payload['location'])) {
+            $msg .= 'Локация: ' . $payload['location'] . PHP_EOL;
+        }
+
+        $builderService->sendMessage($msg);
+
+        return response()->noContent();
+    }
 }

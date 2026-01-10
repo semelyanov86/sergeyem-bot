@@ -8,7 +8,6 @@ use App\Data\FireflyTransactionCreateData;
 use App\Enums\ChatStateEnum;
 use App\Enums\TransactionTypeEnum;
 use App\Services\FireflyConnector;
-use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use DefStudio\Telegraph\Enums\ChatActions;
 use DefStudio\Telegraph\Keyboard\ReplyButton;
@@ -25,7 +24,7 @@ trait FireflyTelegramBotTrait
             $date = $date->subMonths((int) $months);
         }
         $msg = '<b>Состояние счёта за ' . $date->monthName . ' месяц</b>' . PHP_EOL;
-        $balance = app(FireflyConnector::class)->getBalance($date);
+        $balance = resolve(FireflyConnector::class)->getBalance($date);
         if ($balance) {
             if (isset($balance['balance-in-EUR'])) {
                 $msg .= 'Баланс в евро: ' . $balance['balance-in-EUR']->value_parsed . PHP_EOL;
@@ -62,7 +61,7 @@ trait FireflyTelegramBotTrait
     {
         $this->chat->action(ChatActions::TYPING)->send();
         $msg = '<b>Доступные остатки по счетам:</b>' . PHP_EOL;
-        $accounts = app(FireflyConnector::class)->getAccounts();
+        $accounts = resolve(FireflyConnector::class)->getAccounts();
         foreach ($accounts as $key => $account) {
             if (in_array($account->attributes->type, ['initial-balance', 'revenue', 'expense'])) {
                 continue;
@@ -79,7 +78,7 @@ trait FireflyTelegramBotTrait
         $msg = '<b>Операции за последниe несколько дней:</b>' . PHP_EOL;
         $totalEur = 0;
         $totalRub = 0;
-        $transactions = app(FireflyConnector::class)->getTransactions();
+        $transactions = resolve(FireflyConnector::class)->getTransactions();
         foreach ($transactions as $transaction) {
             foreach ($transaction->attributes->transactions as $transactionDetail) {
                 $amount = (float) $transactionDetail->amount;
@@ -89,7 +88,7 @@ trait FireflyTelegramBotTrait
                 if ($transactionDetail->currency_id === '20') {
                     $totalRub += $amount;
                 }
-                $msg .= '- <b>' . $transactionDetail->description . '</b>: ' . number_format($amount, 2, ',', ' ') . ' ' . $transactionDetail->currency_symbol . '. ' . Carbon::parse($transactionDetail->date)->diffForHumans() . '. (ID: ' . $transaction->id . ')' . PHP_EOL;
+                $msg .= '- <b>' . $transactionDetail->description . '</b>: ' . number_format($amount, 2, ',', ' ') . ' ' . $transactionDetail->currency_symbol . '. ' . \Illuminate\Support\Facades\Date::parse($transactionDetail->date)->diffForHumans() . '. (ID: ' . $transaction->id . ')' . PHP_EOL;
             }
         }
 
@@ -103,11 +102,11 @@ trait FireflyTelegramBotTrait
     public function categories(int|string|null $num): void
     {
         $this->chat->action(ChatActions::TYPING)->send();
-        $service = app(FireflyConnector::class);
+        $service = resolve(FireflyConnector::class);
         if ($num) {
             $num = (int) $num;
-            $start = \Illuminate\Support\Carbon::now()->subMonths($num)->firstOfMonth()->format('Y-m-d');
-            $end = \Illuminate\Support\Carbon::now()->subMonths($num)->endOfMonth()->format('Y-m-d');
+            $start = \Illuminate\Support\Facades\Date::now()->subMonths($num)->firstOfMonth()->format('Y-m-d');
+            $end = \Illuminate\Support\Facades\Date::now()->subMonths($num)->endOfMonth()->format('Y-m-d');
             $categories = $service->getCategoriesStat($start, $end);
             $msg = '<b>Статистика по категориям за период ' . $start . ' - ' . $end . '</b>' . PHP_EOL;
         } else {
@@ -137,11 +136,11 @@ trait FireflyTelegramBotTrait
 
     public function budgets(int|string|null $num): void
     {
-        $service = app(FireflyConnector::class);
+        $service = resolve(FireflyConnector::class);
         if ($num) {
             $num = (int) $num;
-            $start = \Illuminate\Support\Carbon::now()->subMonths($num)->firstOfMonth()->format('Y-m-d H:i:s');
-            $end = \Illuminate\Support\Carbon::now()->subMonths($num)->endOfMonth()->format('Y-m-d H:i:s');
+            $start = \Illuminate\Support\Facades\Date::now()->subMonths($num)->firstOfMonth()->format('Y-m-d H:i:s');
+            $end = \Illuminate\Support\Facades\Date::now()->subMonths($num)->endOfMonth()->format('Y-m-d H:i:s');
             $budgets = $service->getBudgetStat($start, $end);
             $msg = '<b>Статистика по бюджетам за период ' . $start . ' - ' . $end . '</b>' . PHP_EOL;
         } else {
@@ -158,7 +157,7 @@ trait FireflyTelegramBotTrait
 
     public function delete(string $id): void
     {
-        app(FireflyConnector::class)->deleteTransaction((int) $id);
+        resolve(FireflyConnector::class)->deleteTransaction((int) $id);
         $this->reply('Транзакция успешно удалена');
     }
 
@@ -191,7 +190,7 @@ trait FireflyTelegramBotTrait
         $context['description'] = $text->value();
         $this->chat->context = $context;
         $this->chat->save();
-        $accounts = app(FireflyConnector::class)->getAccountValuesByType('asset');
+        $accounts = resolve(FireflyConnector::class)->getAccountValuesByType('asset');
         $buttons = [];
         foreach ($accounts as $id => $account) {
             $buttons[] = ReplyButton::make($id . '|' . $account);
@@ -214,7 +213,7 @@ trait FireflyTelegramBotTrait
         $context['source_id'] = (int) $accounts[0];
         $this->chat->context = $context;
         $this->chat->save();
-        $accounts = app(FireflyConnector::class)->getAccountValuesByType('expense');
+        $accounts = resolve(FireflyConnector::class)->getAccountValuesByType('expense');
         $buttons = [];
         foreach ($accounts as $id => $account) {
             $buttons[] = ReplyButton::make($id . '|' . $account);
@@ -237,7 +236,7 @@ trait FireflyTelegramBotTrait
         $context['destination_id'] = (int) $accounts[0];
         $this->chat->context = $context;
         $this->chat->save();
-        $categories = app(FireflyConnector::class)->getCategories();
+        $categories = resolve(FireflyConnector::class)->getCategories();
         $buttons = [];
         foreach ($categories as $category) {
             $buttons[] = ReplyButton::make($category->id . '|' . $category->attributes->name);
@@ -260,7 +259,7 @@ trait FireflyTelegramBotTrait
         $context['category_id'] = (int) $accounts[0];
         $this->chat->context = $context;
         $this->chat->save();
-        $budgets = app(FireflyConnector::class)->getBudgets();
+        $budgets = resolve(FireflyConnector::class)->getBudgets();
         $buttons = [
             ReplyButton::make('0|Без бюджета'),
         ];
@@ -291,7 +290,7 @@ trait FireflyTelegramBotTrait
             $context['budget_id'] = $budgetId;
         }
         $context['type'] = TransactionTypeEnum::WITHDRAWAL;
-        $transaction = app(FireflyConnector::class)->sendTransaction(FireflyTransactionCreateData::from($context));
+        $transaction = resolve(FireflyConnector::class)->sendTransaction(FireflyTransactionCreateData::from($context));
 
         $this->chat->message('Транзакция успешно создана под номером ' . $transaction)->removeReplyKeyboard()->send();
     }

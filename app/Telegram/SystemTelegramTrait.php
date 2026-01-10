@@ -43,7 +43,7 @@ trait SystemTelegramTrait
     {
         $this->chat->action(ChatActions::TYPING)->send();
         $msg = '<b>Курсы валют:</b>' . PHP_EOL;
-        $eurRates = app(EuroRates::class)->handle();
+        $eurRates = resolve(EuroRates::class)->handle();
         $msg .= '<b>Курс евро на дату ' . $eurRates['date'] . '</b>' . PHP_EOL;
         $msg .= '- USD: ' . $eurRates['rates']['USD'] . PHP_EOL;
         $msg .= '- GBP: ' . $eurRates['rates']['GBP'] . PHP_EOL;
@@ -54,7 +54,7 @@ trait SystemTelegramTrait
         $msg .= '- RUB: ' . $eurRates['rates']['RUB'] . PHP_EOL;
         $msg .= PHP_EOL;
         $msg .= PHP_EOL;
-        $cbr = app(CbrRates::class)->handle();
+        $cbr = resolve(CbrRates::class)->handle();
         $msg .= '<b>Курс валют ЦБРФ на ' . $cbr['date'] . '</b>' . PHP_EOL;
         $msg .= '- USD: ' . $cbr['rates']['USD']->value . PHP_EOL;
         $msg .= '- EUR: ' . $cbr['rates']['EUR']->value . PHP_EOL;
