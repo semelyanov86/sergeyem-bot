@@ -29,6 +29,18 @@ trait EasywordsTelegramTrait
         $this->reply($msg);
     }
 
+    public function search(string $query): void
+    {
+        $this->chat->action(ChatActions::TYPING)->send();
+        $msg = 'Список найденных слов 👇' . PHP_EOL;
+
+        $words = resolve(EasywordsConnector::class)->searchWords($query);
+        foreach ($words as $key => $word) {
+            $msg .= $key + 1 . '. <b>' . $word->attributes->original . '</b> - ' . $word->attributes->translated . PHP_EOL;
+        }
+        $this->reply($msg);
+    }
+
     public function saveword(): void
     {
         $this->chat->state = ChatStateEnum::ASK_WORD_ORIGINAL;

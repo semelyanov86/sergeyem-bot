@@ -29,6 +29,24 @@ final class EasywordsConnector
         return WordData::collect($response->json('data'), 'array');
     }
 
+    /**
+     * @return WordData[]
+     * @throws \Illuminate\Http\Client\ConnectionException
+     */
+    public function searchWords(string $query): array
+    {
+        /** @var string $url */
+        $url = config('services.easywords.url');
+
+        $response = $this->getRequest()->get($url . '/words/search?query=' . $query);
+        if (! $response->ok()) {
+            throw new \DomainException('Can not get random words: ' . $response->body());
+        }
+
+        // @phpstan-ignore-next-line
+        return WordData::collect($response->json('data'), 'array');
+    }
+
     public function saveWord(CreateWordData $word): WordData
     {
         /** @var string $url */
