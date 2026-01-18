@@ -20,7 +20,7 @@ final class EasywordsConnector
         /** @var string $url */
         $url = config('services.easywords.url');
 
-        $response = $this->getRequest()->get($url . '/random/' . $number);
+        $response = $this->getRequest()->get($url . '/random?limit=' . $number);
         if (! $response->ok()) {
             throw new \DomainException('Can not get random words: ' . $response->body());
         }
