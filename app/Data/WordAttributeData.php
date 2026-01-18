@@ -13,6 +13,6 @@ final class WordAttributeData extends Data
         public string $translated,
         public bool $starred,
         public int $views,
-        public int $user_id,
+        public ?int $user_id = null,
     ) {}
 }
