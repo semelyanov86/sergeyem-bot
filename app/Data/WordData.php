@@ -10,10 +10,7 @@ final class WordData extends Data
 {
     public function __construct(
         public int $id,
-        public string $original,
-        public string $translated,
-        public bool $starred,
-        public int $views,
-        public int $user_id,
+        public string $type,
+        public WordAttributeData $attributes,
     ) {}
 }

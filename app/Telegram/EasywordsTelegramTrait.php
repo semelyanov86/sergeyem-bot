@@ -24,7 +24,7 @@ trait EasywordsTelegramTrait
         $number = (int) $number;
         $words = resolve(EasywordsConnector::class)->getRandomWords($number);
         foreach ($words as $key => $word) {
-            $msg .= $key + 1 . '. <b>' . $word->original . '</b> - ' . $word->translated . PHP_EOL;
+            $msg .= $key + 1 . '. <b>' . $word->attributes->original . '</b> - ' . $word->attributes->translated . PHP_EOL;
         }
         $this->reply($msg);
     }
