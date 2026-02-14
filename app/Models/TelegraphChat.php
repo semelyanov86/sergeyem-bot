@@ -20,6 +20,7 @@ class TelegraphChat extends Chat
         'context',
     ];
 
+    #[\Override]
     protected function casts(): array
     {
         return [
