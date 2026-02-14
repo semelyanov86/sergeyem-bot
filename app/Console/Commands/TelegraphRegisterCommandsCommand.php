@@ -38,6 +38,8 @@ final class TelegraphRegisterCommandsCommand extends Command
             'delete' => 'Удаление транзакции по ИД',
             'rates' => 'Показывает курсы валют',
             'check' => 'Проверяет соединение с сайтами',
+            'tasks' => 'Получает список последних задач',
+            'task' => 'Позволяет создать задачу в TickTick',
         ])->send();
     }
 }

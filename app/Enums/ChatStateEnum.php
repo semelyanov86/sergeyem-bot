@@ -25,4 +25,10 @@ enum ChatStateEnum: string
     case ASK_TRANSACTION_CATEGORY = 'askTransactionCategory';
 
     case ASK_TRANSACTION_BUDGET = 'askTransactionBudget';
+
+    case ASK_TASK_TITLE = 'askTaskTitle';
+
+    case ASK_TASK_CONTENT = 'askTaskContent';
+
+    case ASK_TASK_DUE_DATE = 'askTaskDueDate';
 }

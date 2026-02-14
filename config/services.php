@@ -67,6 +67,10 @@ return [
             'https://easywordsapp.ru/#/login' => '<link rel="stylesheet" href="https://easywordsapp.ru/build/assets',
         ],
     ],
+    'ticktick' => [
+        'token' => env('TICK_TICK_TOKEN'),
+        'url' => 'https://ticktick.com/open/v1',
+    ],
     'currency' => [
         'eur_url' => env('CURRENCY_RATE_URL'),
         'eur_key' => env('CURRENCY_RATE_KEY'),

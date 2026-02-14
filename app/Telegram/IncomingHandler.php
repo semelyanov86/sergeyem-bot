@@ -19,6 +19,7 @@ final class IncomingHandler extends WebhookHandler
     use GeneralInfoTrait;
     use LinkAceTelegramTrait;
     use SystemTelegramTrait;
+    use TickTickTelegramTrait;
 
     #[\Override]
     protected function handleChatMessage(Stringable $text): void
