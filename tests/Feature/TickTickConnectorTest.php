@@ -130,4 +130,28 @@ class TickTickConnectorTest extends TestCase
         $this->assertNull($result->dueDate);
         $this->assertSame('inbox115259477', $result->projectId);
     }
+
+    public function test_complete_task_sends_post_request(): void
+    {
+        Http::fake([
+            'ticktick.com/open/v1/project/inbox/task/task123/complete' => Http::response(null, 200),
+        ]);
+
+        resolve(TickTickConnector::class)->completeTask('task123');
+
+        Http::assertSent(fn ($request) => $request->url() === 'https://ticktick.com/open/v1/project/inbox/task/task123/complete'
+                && $request->method() === 'POST');
+    }
+
+    public function test_complete_task_throws_exception_on_error(): void
+    {
+        Http::fake([
+            'ticktick.com/open/v1/project/inbox/task/task123/complete' => Http::response('Not Found', 404),
+        ]);
+
+        $this->expectException(\DomainException::class);
+        $this->expectExceptionMessage('Can not complete task:');
+
+        resolve(TickTickConnector::class)->completeTask('task123');
+    }
 }

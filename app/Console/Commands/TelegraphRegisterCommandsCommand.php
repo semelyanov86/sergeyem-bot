@@ -40,6 +40,7 @@ final class TelegraphRegisterCommandsCommand extends Command
             'check' => 'Проверяет соединение с сайтами',
             'tasks' => 'Получает список последних задач',
             'task' => 'Позволяет создать задачу в TickTick',
+            'done' => 'Отметить задачу как выполненную',
         ])->send();
     }
 }

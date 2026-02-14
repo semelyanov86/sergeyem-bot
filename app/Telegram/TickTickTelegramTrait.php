@@ -8,6 +8,7 @@ use App\Data\CreateTickTickTaskData;
 use App\Enums\ChatStateEnum;
 use App\Services\TickTickConnector;
 use DefStudio\Telegraph\Enums\ChatActions;
+use DefStudio\Telegraph\Keyboard\Keyboard;
 use Illuminate\Support\Stringable;
 
 trait TickTickTelegramTrait
@@ -33,6 +34,39 @@ trait TickTickTelegramTrait
         }
 
         $this->reply($msg);
+    }
+
+    public function done(): void
+    {
+        $this->chat->action(ChatActions::TYPING)->send();
+
+        $tasks = resolve(TickTickConnector::class)->getTasks();
+        if (empty($tasks)) {
+            $this->reply('Список задач пуст');
+
+            return;
+        }
+
+        $this->chat->message('Выберите задачу для завершения:')->keyboard(function (Keyboard $keyboard) use ($tasks) {
+            $keyboard = $keyboard->chunk(1);
+            foreach ($tasks as $task) {
+                $keyboard->button($task->title)->action('completeTask')->param('id', $task->id);
+            }
+
+            return $keyboard;
+        })->send();
+    }
+
+    public function completeTask(string $id): void
+    {
+        $this->chat->action(ChatActions::TYPING)->send();
+
+        try {
+            resolve(TickTickConnector::class)->completeTask($id);
+            $this->reply('Задача успешно завершена.');
+        } catch (\DomainException $e) {
+            $this->reply('Ошибка при завершении задачи: ' . $e->getMessage());
+        }
     }
 
     public function task(): void

@@ -46,6 +46,20 @@ final class TickTickConnector
         return TickTickTaskData::from($response->json());
     }
 
+    /**
+     * @throws \Illuminate\Http\Client\ConnectionException
+     */
+    public function completeTask(string $taskId): void
+    {
+        /** @var string $url */
+        $url = config('services.ticktick.url');
+
+        $response = $this->getRequest()->post($url . '/project/inbox/task/' . $taskId . '/complete');
+        if (! $response->ok()) {
+            throw new \DomainException('Can not complete task: ' . $response->body());
+        }
+    }
+
     protected function getRequest(): PendingRequest
     {
         /** @var string $token */
