@@ -28,7 +28,7 @@ trait TickTickTelegramTrait
         foreach ($tasks as $key => $task) {
             $msg .= $key + 1 . '. ' . $task->title;
             if ($task->dueDate) {
-                $msg .= ' (до ' . Carbon::parse($task->dueDate)->format('d.m.Y') . ')';
+                $msg .= ' (до ' . \Illuminate\Support\Facades\Date::parse($task->dueDate)->format('d.m.Y') . ')';
             }
             $msg .= PHP_EOL;
         }
@@ -104,7 +104,7 @@ trait TickTickTelegramTrait
         $this->chat->context = [];
         $this->chat->save();
 
-        $context['dueDate'] = $text->value() === '-' ? null : Carbon::parse($text->value())->format('Y-m-d\TH:i:sO');
+        $context['dueDate'] = $text->value() === '-' ? null : \Illuminate\Support\Facades\Date::parse($text->value())->format('Y-m-d\TH:i:sO');
 
         $result = resolve(TickTickConnector::class)->createTask(CreateTickTickTaskData::from($context));
         $this->reply('Задача "<b>' . $result->title . '</b>" успешно создана.');
