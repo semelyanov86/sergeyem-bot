@@ -4,23 +4,30 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Services\ClickUpWebhookService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 
 final class ClickUpController extends Controller
 {
-    public function webhook(Request $request): Response
+    public function webhook(Request $request, ClickUpWebhookService $service): Response
     {
         if (! config('services.clickup.webhook_enabled')) {
             abort(403, 'ClickUp webhooks are disabled');
         }
 
-        Log::info('ClickUp webhook received', [
-            'headers' => $request->headers->all(),
-            'payload' => $request->all(),
-            'raw_content' => $request->getContent(),
-        ]);
+        $event = $request->string('event')->value();
+        $taskId = $request->string('task_id')->value();
+
+        /** @var array<int, array<string, mixed>> $historyItems */
+        $historyItems = $request->input('history_items', []);
+
+        match ($event) {
+            'taskCreated' => $service->handleTaskCreated($taskId),
+            'taskUpdated' => $service->handleTaskUpdated($taskId),
+            'taskCommentPosted' => $service->handleCommentPosted($taskId, $historyItems),
+            default => null,
+        };
 
         return response()->noContent();
     }

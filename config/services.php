@@ -73,6 +73,7 @@ return [
     ],
     'clickup' => [
         'webhook_enabled' => env('CLICKUP_WEBHOOK_ENABLED', true),
+        'token' => env('CLICKUP_API_TOKEN'),
     ],
     'currency' => [
         'eur_url' => env('CURRENCY_RATE_URL'),
