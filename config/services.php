@@ -71,6 +71,9 @@ return [
         'token' => env('TICK_TICK_TOKEN'),
         'url' => 'https://ticktick.com/open/v1',
     ],
+    'clickup' => [
+        'webhook_enabled' => env('CLICKUP_WEBHOOK_ENABLED', true),
+    ],
     'currency' => [
         'eur_url' => env('CURRENCY_RATE_URL'),
         'eur_key' => env('CURRENCY_RATE_KEY'),

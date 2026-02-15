@@ -28,6 +28,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'subscribe/*',
             'subscribe',
             'meeting',
+            'webhooks/*',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
