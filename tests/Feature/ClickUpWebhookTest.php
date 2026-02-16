@@ -15,6 +15,12 @@ class ClickUpWebhookTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        config(['services.clickup.proxy_url' => null]);
+    }
+
     public function test_task_created_sends_telegram_message(): void
     {
         $this->createChat();

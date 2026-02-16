@@ -74,6 +74,9 @@ return [
     'clickup' => [
         'webhook_enabled' => env('CLICKUP_WEBHOOK_ENABLED', true),
         'token' => env('CLICKUP_API_TOKEN'),
+        'base_url' => 'https://api.clickup.com/api/v2',
+        'proxy_url' => env('CLICKUP_PROXY_URL'),
+        'proxy_secret' => env('CLICKUP_PROXY_SECRET'),
     ],
     'currency' => [
         'eur_url' => env('CURRENCY_RATE_URL'),
