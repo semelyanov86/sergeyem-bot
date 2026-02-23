@@ -29,6 +29,6 @@ final class ClickUpController extends Controller
             default => null,
         };
 
-        return response()->noContent();
+        return response()->json(['success' => 'ok'], 200);
     }
 }
