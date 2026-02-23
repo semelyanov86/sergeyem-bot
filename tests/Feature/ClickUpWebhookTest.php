@@ -81,7 +81,7 @@ class ClickUpWebhookTest extends TestCase
             'event' => 'taskUpdated',
             'task_id' => 'abc123',
             'history_items' => [],
-        ])->assertNoContent();
+        ])->assertOk();
 
         Telegraph::assertNothingSent();
     }
