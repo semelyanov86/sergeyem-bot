@@ -34,7 +34,7 @@ class ClickUpWebhookTest extends TestCase
             'event' => 'taskCreated',
             'task_id' => 'abc123',
             'history_items' => [],
-        ])->assertNoContent();
+        ])->assertOk();
 
         Telegraph::assertSent('Новый тикет', exact: false);
     }
@@ -52,7 +52,7 @@ class ClickUpWebhookTest extends TestCase
             'event' => 'taskUpdated',
             'task_id' => 'abc123',
             'history_items' => [],
-        ])->assertNoContent();
+        ])->assertOk();
 
         Telegraph::assertSent('Тикет обновлён', exact: false);
     }
@@ -70,7 +70,7 @@ class ClickUpWebhookTest extends TestCase
             'event' => 'taskUpdated',
             'task_id' => 'abc123',
             'history_items' => [],
-        ])->assertNoContent();
+        ])->assertOk();
 
         Telegraph::assertSent('Тикет обновлён', exact: false);
 
@@ -99,7 +99,7 @@ class ClickUpWebhookTest extends TestCase
             'event' => 'taskCreated',
             'task_id' => 'abc123',
             'history_items' => [],
-        ])->assertNoContent();
+        ])->assertOk();
 
         Telegraph::assertNothingSent();
     }
@@ -125,7 +125,7 @@ class ClickUpWebhookTest extends TestCase
                     ],
                 ],
             ],
-        ])->assertNoContent();
+        ])->assertOk();
 
         Telegraph::assertSent('Новый комментарий', exact: false);
     }
@@ -151,7 +151,7 @@ class ClickUpWebhookTest extends TestCase
                     ],
                 ],
             ],
-        ])->assertNoContent();
+        ])->assertOk();
 
         Telegraph::assertNothingSent();
     }
@@ -173,7 +173,7 @@ class ClickUpWebhookTest extends TestCase
         $this->postJson('/webhooks/clickup', [
             'event' => 'unknownEvent',
             'task_id' => 'abc123',
-        ])->assertNoContent();
+        ])->assertOk();
 
         Telegraph::assertNothingSent();
     }
@@ -194,7 +194,7 @@ class ClickUpWebhookTest extends TestCase
             'event' => 'taskCreated',
             'task_id' => 'abc123',
             'history_items' => [],
-        ])->assertNoContent();
+        ])->assertOk();
 
         Telegraph::assertSent('Обновлено:', exact: false);
     }
