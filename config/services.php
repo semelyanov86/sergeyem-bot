@@ -78,6 +78,10 @@ return [
         'proxy_url' => env('CLICKUP_PROXY_URL'),
         'proxy_secret' => env('CLICKUP_PROXY_SECRET'),
     ],
+    'claude' => [
+        'url' => env('CLAUDE_ASK_URL', 'https://ask.sergeyem.ru'),
+        'token' => env('CLAUDE_ASK_TOKEN'),
+    ],
     'currency' => [
         'eur_url' => env('CURRENCY_RATE_URL'),
         'eur_key' => env('CURRENCY_RATE_KEY'),

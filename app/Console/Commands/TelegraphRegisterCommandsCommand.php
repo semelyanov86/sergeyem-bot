@@ -41,6 +41,7 @@ final class TelegraphRegisterCommandsCommand extends Command
             'tasks' => 'Получает список последних задач',
             'task' => 'Позволяет создать задачу в TickTick',
             'done' => 'Отметить задачу как выполненную',
+            'ask' => 'Задать вопрос Claude AI',
         ])->send();
     }
 }

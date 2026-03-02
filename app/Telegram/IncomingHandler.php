@@ -13,6 +13,7 @@ use Illuminate\Support\Stringable;
  */
 final class IncomingHandler extends WebhookHandler
 {
+    use ClaudeTelegramTrait;
     use EasylistTelegramTrait;
     use EasywordsTelegramTrait;
     use FireflyTelegramBotTrait;
