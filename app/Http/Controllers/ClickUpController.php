@@ -6,11 +6,11 @@ namespace App\Http\Controllers;
 
 use App\Services\ClickUpWebhookService;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 
 final class ClickUpController extends Controller
 {
-    public function webhook(Request $request, ClickUpWebhookService $service): Response
+    public function webhook(Request $request, ClickUpWebhookService $service): JsonResponse
     {
         if (! config('services.clickup.webhook_enabled')) {
             abort(403, 'ClickUp webhooks are disabled');
@@ -29,6 +29,6 @@ final class ClickUpController extends Controller
             default => null,
         };
 
-        return response()->noContent();
+        return response()->json(['success' => 'ok'], 200);
     }
 }
