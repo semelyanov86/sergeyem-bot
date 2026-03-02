@@ -22,8 +22,22 @@ class ClaudeConnectorTest extends TestCase
 
         $this->assertSame('This is the Claude response.', $result);
 
-        Http::assertSent(fn ($request) => $request->url() === 'https://ask.sergeyem.ru/api/claude/raw'
-                && $request['prompt'] === 'What is Laravel?');
+        Http::assertSent(function ($request) {
+            if ($request->url() !== 'https://ask.sergeyem.ru/api/claude/raw') {
+                return false;
+            }
+
+            /** @var array<int, array{name: string, contents: string}> $data */
+            $data = $request->data();
+
+            foreach ($data as $field) {
+                if ($field['name'] === 'prompt' && $field['contents'] === 'What is Laravel?') {
+                    return true;
+                }
+            }
+
+            return false;
+        });
     }
 
     public function test_ask_throws_exception_on_error(): void

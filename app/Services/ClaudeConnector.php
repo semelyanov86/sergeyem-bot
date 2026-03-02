@@ -17,7 +17,7 @@ final class ClaudeConnector
         /** @var string $url */
         $url = config('services.claude.url');
 
-        $request = $this->getRequest();
+        $request = $this->getRequest()->asMultipart();
 
         if ($filePath !== null) {
             $contents = file_get_contents($filePath);
@@ -28,7 +28,7 @@ final class ClaudeConnector
         }
 
         $response = $request->post($url . '/api/claude/raw', [
-            'prompt' => $prompt,
+            ['name' => 'prompt', 'contents' => $prompt],
         ]);
 
         if (! $response->ok()) {
