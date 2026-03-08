@@ -11,6 +11,6 @@ final class EasylistListAttributeData extends Data
     public function __construct(
         public string $name,
         public ?int $folder_id,
-        public int $items_count,
+        public ?int $items_count = null,
     ) {}
 }
