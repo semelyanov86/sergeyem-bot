@@ -55,6 +55,6 @@ final class EasylistConnector
         /** @var string $token */
         $token = config('services.easylist.token');
 
-        return Http::withToken($token)->asJson();
+        return Http::withToken($token)->asJson()->acceptJson();
     }
 }
