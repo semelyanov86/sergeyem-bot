@@ -17,7 +17,7 @@ trait EasylistTelegramTrait
         $linkService = resolve(EasylistConnector::class);
         $links = $linkService->getLists();
         foreach ($links as $link) {
-            $msg .= $link->id . '. <b>' . $link->attributes->name . '</b> (' . $link->attributes->items_count . ')' . PHP_EOL;
+            $msg .= $link->id . '. <b>' . $link->attributes->name . '</b>' . PHP_EOL;
         }
 
         $this->chat->message($msg)->send();

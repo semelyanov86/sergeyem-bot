@@ -14,8 +14,8 @@ final class EasylistItemAttributesData extends Data
         public int $quantity,
         public float $price,
         public string $quantity_type,
-        public int $list_id,
         public bool $is_starred,
         public bool $is_done,
+        public ?int $list_id = null,
     ) {}
 }
