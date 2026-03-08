@@ -42,7 +42,7 @@ return [
     ],
     'easylist' => [
         'token' => env('EASYLIST_TOKEN'),
-        'url' => 'https://easylist.sergeyem.ru/api/v1/',
+        'url' => 'https://easylist.sergeyem.ru/api/v1',
     ],
     'easywords' => [
         'url' => 'https://easywordsapp.ru/api/v1',
