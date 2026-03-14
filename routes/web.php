@@ -16,3 +16,4 @@ Route::post('/subscribe', [\App\Http\Controllers\MainController::class, 'subscri
 Route::post('/subscribe/sergeyem', [\App\Http\Controllers\MainController::class, 'subscribeSergey'])->name('subscribe.sergeyem');
 Route::post('/meeting', [\App\Http\Controllers\MainController::class, 'meeting'])->name('meeting');
 Route::post('/webhooks/clickup', [\App\Http\Controllers\ClickUpController::class, 'webhook'])->name('webhooks.clickup');
+Route::post('/webhooks/notify', \App\Http\Controllers\WebhookNotifyController::class)->name('webhooks.notify');

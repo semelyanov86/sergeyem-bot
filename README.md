@@ -94,6 +94,13 @@ LINKACE_API_TOKEN=your_linkace_token
 
 ---
 
+```bash
+curl -X POST https://your-bot.url/webhooks/notify \
+  -H "Authorization: Bearer your-secret-token" \
+  -H "Content-Type: text/plain" \
+  -d "Текст сообщения"
+```
+
 ## 🌐 Integrations
 
 - **Firefly III** — Connect via API to manage your finances and budgets.
