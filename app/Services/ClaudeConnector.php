@@ -46,6 +46,6 @@ final class ClaudeConnector
         /** @var string $token */
         $token = config('services.claude.token');
 
-        return Http::withToken($token)->acceptJson();
+        return Http::withToken($token)->acceptJson()->timeout(120);
     }
 }
