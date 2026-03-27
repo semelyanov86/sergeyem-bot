@@ -7,6 +7,7 @@ namespace App\Actions;
 use App\Data\CbrRateData;
 use Illuminate\Support\Facades\Http;
 use Lorisleiva\Actions\Concerns\AsAction;
+use Illuminate\Http\Client\ConnectionException;
 
 final class CbrRates
 {
@@ -14,7 +15,7 @@ final class CbrRates
 
     /**
      * @return array{date: string, rates: array<string, CbrRateData>}
-     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws ConnectionException
      */
     public function handle(): array
     {

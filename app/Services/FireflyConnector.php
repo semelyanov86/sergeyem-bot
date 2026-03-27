@@ -16,12 +16,14 @@ use App\Enums\TransactionTypeEnum;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Support\Facades\Date;
 
 final class FireflyConnector
 {
     /**
      * @return FireflyCategoryData[]
-     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws ConnectionException
      */
     public function getCategories(): array
     {
@@ -45,7 +47,7 @@ final class FireflyConnector
 
     /**
      * @return FireflyBudgetData[]
-     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws ConnectionException
      */
     public function getBudgets(): array
     {
@@ -61,7 +63,7 @@ final class FireflyConnector
 
     /**
      * @return FireflyAccountData[]
-     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws ConnectionException
      */
     public function getAccounts(): array
     {
@@ -77,7 +79,7 @@ final class FireflyConnector
 
     /**
      * @return FireflyCurrencyData[]
-     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws ConnectionException
      */
     public function getCurrencies(): array
     {
@@ -125,13 +127,13 @@ final class FireflyConnector
 
     /**
      * @return TransactionData[]
-     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws ConnectionException
      */
     public function getTransactions(): array
     {
         $response = $this->getRequest()->get($this->getServer() . '/transactions', [
-            'start' => \Illuminate\Support\Facades\Date::now()->subDays(4)->format('Y-m-d'),
-            'end' => \Illuminate\Support\Facades\Date::tomorrow()->format('Y-m-d'),
+            'start' => Date::now()->subDays(4)->format('Y-m-d'),
+            'end' => Date::tomorrow()->format('Y-m-d'),
             'type' => TransactionTypeEnum::WITHDRAWAL->value,
         ]);
 
@@ -145,15 +147,15 @@ final class FireflyConnector
 
     /**
      * @return FireflyCategoryExpenseData[]
-     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws ConnectionException
      */
     public function getCategoriesStat(?string $start = null, ?string $end = null): array
     {
         if (! $start) {
-            $start = \Illuminate\Support\Facades\Date::now()->firstOfMonth()->format('Y-m-d');
+            $start = Date::now()->firstOfMonth()->format('Y-m-d');
         }
         if (! $end) {
-            $end = \Illuminate\Support\Facades\Date::now()->format('Y-m-d');
+            $end = Date::now()->format('Y-m-d');
         }
 
         $response = $this->getRequest()->get($this->getServer() . '/insight/expense/category', [
@@ -171,15 +173,15 @@ final class FireflyConnector
 
     /**
      * @return FireflyCategoryExpenseData[]
-     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws ConnectionException
      */
     public function getBudgetStat(?string $start = null, ?string $end = null): array
     {
         if (! $start) {
-            $start = \Illuminate\Support\Facades\Date::now()->firstOfMonth()->format('Y-m-d');
+            $start = Date::now()->firstOfMonth()->format('Y-m-d');
         }
         if (! $end) {
-            $end = \Illuminate\Support\Facades\Date::now()->format('Y-m-d');
+            $end = Date::now()->format('Y-m-d');
         }
 
         $response = $this->getRequest()->get($this->getServer() . '/insight/expense/budget', [

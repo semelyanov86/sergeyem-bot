@@ -8,13 +8,14 @@ use App\Data\CreateTickTickTaskData;
 use App\Data\TickTickTaskData;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Client\ConnectionException;
 
 final class TickTickConnector
 {
     /**
      * @return TickTickTaskData[]
      *
-     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws ConnectionException
      */
     public function getTasks(): array
     {
@@ -31,7 +32,7 @@ final class TickTickConnector
     }
 
     /**
-     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws ConnectionException
      */
     public function createTask(CreateTickTickTaskData $task): TickTickTaskData
     {
@@ -47,7 +48,7 @@ final class TickTickConnector
     }
 
     /**
-     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws ConnectionException
      */
     public function completeTask(string $taskId): void
     {

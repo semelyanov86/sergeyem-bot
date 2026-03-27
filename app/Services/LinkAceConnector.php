@@ -8,12 +8,13 @@ use App\Data\LinkaceListData;
 use App\Data\LinkData;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Client\ConnectionException;
 
 final class LinkAceConnector
 {
     /**
      * @return LinkData[]
-     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws ConnectionException
      */
     public function getAllLinks(int $number = 6): array
     {

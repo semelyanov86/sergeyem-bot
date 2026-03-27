@@ -7,6 +7,7 @@ namespace Tests\Feature;
 use App\Services\ClickUpConnector;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
+use Illuminate\Http\Client\Request;
 
 class ClickUpConnectorTest extends TestCase
 {
@@ -68,7 +69,7 @@ class ClickUpConnectorTest extends TestCase
         $this->assertSame('abc123', $result['id']);
         $this->assertSame('Proxied Task', $result['name']);
 
-        Http::assertSent(fn (\Illuminate\Http\Client\Request $request) => $request->url() === 'https://proxy.example.com/proxy'
+        Http::assertSent(fn (Request $request) => $request->url() === 'https://proxy.example.com/proxy'
                 && $request->method() === 'POST'
                 && $request->header('X-Proxy-Token')[0] === 'test-proxy-secret'
                 && $request->header('X-Target-Url')[0] === 'https://api.clickup.com/api/v2/task/abc123'

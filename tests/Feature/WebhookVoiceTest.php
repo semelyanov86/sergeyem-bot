@@ -7,12 +7,15 @@ namespace Tests\Feature;
 use App\Models\TelegraphChat;
 use DefStudio\Telegraph\Facades\Telegraph;
 use DefStudio\Telegraph\Models\TelegraphBot;
+use DefStudio\Telegraph\Telegraph as TelegraphBase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 use Illuminate\Http\Response;
 use Illuminate\Testing\TestResponse;
 
-class WebhookNotifyTest extends TestCase
+class WebhookVoiceTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -22,65 +25,53 @@ class WebhookNotifyTest extends TestCase
     {
         parent::setUp();
         config(['services.webhook_notify.token' => $this->token]);
+        Storage::fake('local');
     }
 
-    public function test_sends_message_to_telegram(): void
+    public function test_sends_voice_to_telegram(): void
     {
         $this->createChat();
         Telegraph::fake();
 
-        $this->callNotify('Hello from webhook')
-            ->assertOk();
+        $file = UploadedFile::fake()->create('voice.ogg', 10, 'audio/ogg');
 
-        Telegraph::assertSent('Hello from webhook');
-    }
+        $this->callVoice($file)->assertOk();
 
-    public function test_splits_long_message_into_chunks(): void
-    {
-        $this->createChat();
-        Telegraph::fake();
-
-        $message = str_repeat('A', 8500);
-
-        $this->callNotify($message)
-            ->assertOk();
-
-        Telegraph::assertSent(str_repeat('A', 4000));
-        Telegraph::assertSent(str_repeat('A', 500));
+        Telegraph::assertSentFiles(TelegraphBase::ENDPOINT_SEND_VOICE);
     }
 
     public function test_rejects_invalid_token(): void
     {
-        $this->call('POST', '/webhooks/notify', server: [
+        $file = UploadedFile::fake()->create('voice.ogg', 10, 'audio/ogg');
+
+        $this->call('POST', '/webhooks/voice', [], [], ['voice' => $file], [
             'HTTP_AUTHORIZATION' => 'Bearer wrong-token',
-            'CONTENT_TYPE' => 'text/plain',
-        ], content: 'Hello')
-            ->assertForbidden();
+        ])->assertForbidden();
     }
 
     public function test_rejects_missing_token(): void
     {
-        $this->call('POST', '/webhooks/notify', server: [
-            'CONTENT_TYPE' => 'text/plain',
-        ], content: 'Hello')
+        $file = UploadedFile::fake()->create('voice.ogg', 10, 'audio/ogg');
+
+        $this->call('POST', '/webhooks/voice', [], [], ['voice' => $file])
             ->assertForbidden();
     }
 
-    public function test_rejects_empty_message(): void
+    public function test_rejects_missing_file(): void
     {
         $this->createChat();
 
-        $this->callNotify('')
-            ->assertUnprocessable();
+        $this->call('POST', '/webhooks/voice', server: [
+            'HTTP_AUTHORIZATION' => 'Bearer ' . $this->token,
+        ])->assertUnprocessable();
     }
 
     /** @return TestResponse<Response> */
-    private function callNotify(string $content): TestResponse
+    private function callVoice(UploadedFile $file): TestResponse
     {
-        return $this->call('POST', '/webhooks/notify', server: [
+        return $this->call('POST', '/webhooks/voice', [], [], ['voice' => $file], [
             'HTTP_AUTHORIZATION' => 'Bearer ' . $this->token,
-            'CONTENT_TYPE' => 'text/plain',
-        ], content: $content);
+        ]);
     }
 
     private function createChat(): void

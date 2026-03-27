@@ -5,13 +5,15 @@ declare(strict_types=1);
 namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\Response;
 
 final class ClickUpConnector
 {
     /**
      * @return array<string, mixed>
      *
-     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws ConnectionException
      */
     public function getTask(string $taskId): array
     {
@@ -32,7 +34,7 @@ final class ClickUpConnector
     /**
      * @param  array<string, mixed>  $body
      */
-    private function sendRequest(string $method, string $targetUrl, array $body = []): \Illuminate\Http\Client\Response
+    private function sendRequest(string $method, string $targetUrl, array $body = []): Response
     {
         /** @var string $token */
         $token = config('services.clickup.token');
@@ -50,7 +52,7 @@ final class ClickUpConnector
     /**
      * @param  array<string, mixed>  $body
      */
-    private function sendViaProxy(string $proxyUrl, string $method, string $targetUrl, string $token, array $body): \Illuminate\Http\Client\Response
+    private function sendViaProxy(string $proxyUrl, string $method, string $targetUrl, string $token, array $body): Response
     {
         /** @var string $proxySecret */
         $proxySecret = config('services.clickup.proxy_secret');
@@ -71,7 +73,7 @@ final class ClickUpConnector
     /**
      * @param  array<string, mixed>  $body
      */
-    private function sendDirect(string $method, string $targetUrl, string $token, array $body): \Illuminate\Http\Client\Response
+    private function sendDirect(string $method, string $targetUrl, string $token, array $body): Response
     {
         $request = Http::withToken($token, '')->asJson()->acceptJson();
 

@@ -6,6 +6,8 @@ use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\Config\RectorConfig;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\LevelSetList;
+use RectorLaravel\Set\LaravelLevelSetList;
+use RectorLaravel\Set\LaravelSetList;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
@@ -22,11 +24,11 @@ return static function (RectorConfig $rectorConfig): void {
     // define sets of rules
     $rectorConfig->sets([
         LevelSetList::UP_TO_PHP_83,
-        \RectorLaravel\Set\LaravelSetList::LARAVEL_100,
-        \RectorLaravel\Set\LaravelSetList::LARAVEL_110,
-        \RectorLaravel\Set\LaravelSetList::LARAVEL_120,
-        \RectorLaravel\Set\LaravelLevelSetList::UP_TO_LARAVEL_110,
-        \RectorLaravel\Set\LaravelSetList::LARAVEL_CODE_QUALITY,
+        LaravelSetList::LARAVEL_100,
+        LaravelSetList::LARAVEL_110,
+        LaravelSetList::LARAVEL_120,
+        LaravelLevelSetList::UP_TO_LARAVEL_110,
+        LaravelSetList::LARAVEL_CODE_QUALITY,
         PHPUnitSetList::PHPUNIT_100,
     ]);
 };

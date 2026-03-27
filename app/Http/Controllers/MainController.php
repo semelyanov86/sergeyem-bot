@@ -8,12 +8,13 @@ use App\Services\DataBuilderService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Http\JsonResponse;
 
 final class MainController extends Controller
 {
     public const string IP_CACHE = 'LAST_IP';
 
-    public function subscribe(Request $request, DataBuilderService $builderService): \Illuminate\Http\JsonResponse|Response
+    public function subscribe(Request $request, DataBuilderService $builderService): JsonResponse|Response
     {
         $data = $request->all();
         $builderService->validateData($data);
@@ -44,7 +45,7 @@ final class MainController extends Controller
         }
     }
 
-    public function subscribeSergey(Request $request, DataBuilderService $builderService): \Illuminate\Http\JsonResponse|Response
+    public function subscribeSergey(Request $request, DataBuilderService $builderService): JsonResponse|Response
     {
         $data = $request->all();
         $builderService->validateData($data);

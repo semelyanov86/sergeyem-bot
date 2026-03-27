@@ -13,6 +13,7 @@ use DefStudio\Telegraph\Enums\ChatActions;
 use DefStudio\Telegraph\Keyboard\ReplyButton;
 use DefStudio\Telegraph\Keyboard\ReplyKeyboard;
 use Illuminate\Support\Stringable;
+use Illuminate\Support\Facades\Date;
 
 trait FireflyTelegramBotTrait
 {
@@ -88,7 +89,7 @@ trait FireflyTelegramBotTrait
                 if ($transactionDetail->currency_id === '20') {
                     $totalRub += $amount;
                 }
-                $msg .= '- <b>' . $transactionDetail->description . '</b>: ' . number_format($amount, 2, ',', ' ') . ' ' . $transactionDetail->currency_symbol . '. ' . \Illuminate\Support\Facades\Date::parse($transactionDetail->date)->diffForHumans() . '. (ID: ' . $transaction->id . ')' . PHP_EOL;
+                $msg .= '- <b>' . $transactionDetail->description . '</b>: ' . number_format($amount, 2, ',', ' ') . ' ' . $transactionDetail->currency_symbol . '. ' . Date::parse($transactionDetail->date)->diffForHumans() . '. (ID: ' . $transaction->id . ')' . PHP_EOL;
             }
         }
 
@@ -105,8 +106,8 @@ trait FireflyTelegramBotTrait
         $service = resolve(FireflyConnector::class);
         if ($num) {
             $num = (int) $num;
-            $start = \Illuminate\Support\Facades\Date::now()->subMonths($num)->firstOfMonth()->format('Y-m-d');
-            $end = \Illuminate\Support\Facades\Date::now()->subMonths($num)->endOfMonth()->format('Y-m-d');
+            $start = Date::now()->subMonths($num)->firstOfMonth()->format('Y-m-d');
+            $end = Date::now()->subMonths($num)->endOfMonth()->format('Y-m-d');
             $categories = $service->getCategoriesStat($start, $end);
             $msg = '<b>Статистика по категориям за период ' . $start . ' - ' . $end . '</b>' . PHP_EOL;
         } else {
@@ -139,8 +140,8 @@ trait FireflyTelegramBotTrait
         $service = resolve(FireflyConnector::class);
         if ($num) {
             $num = (int) $num;
-            $start = \Illuminate\Support\Facades\Date::now()->subMonths($num)->firstOfMonth()->format('Y-m-d H:i:s');
-            $end = \Illuminate\Support\Facades\Date::now()->subMonths($num)->endOfMonth()->format('Y-m-d H:i:s');
+            $start = Date::now()->subMonths($num)->firstOfMonth()->format('Y-m-d H:i:s');
+            $end = Date::now()->subMonths($num)->endOfMonth()->format('Y-m-d H:i:s');
             $budgets = $service->getBudgetStat($start, $end);
             $msg = '<b>Статистика по бюджетам за период ' . $start . ' - ' . $end . '</b>' . PHP_EOL;
         } else {

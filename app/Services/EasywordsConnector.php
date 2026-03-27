@@ -8,12 +8,13 @@ use App\Data\CreateWordData;
 use App\Data\WordData;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Client\ConnectionException;
 
 final class EasywordsConnector
 {
     /**
      * @return WordData[]
-     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws ConnectionException
      */
     public function getRandomWords(int $number = 5): array
     {
@@ -31,7 +32,7 @@ final class EasywordsConnector
 
     /**
      * @return WordData[]
-     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws ConnectionException
      */
     public function searchWords(string $query): array
     {

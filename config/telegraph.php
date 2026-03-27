@@ -3,6 +3,11 @@
 declare(strict_types=1);
 
 use DefStudio\Telegraph\Telegraph;
+use App\Models\TelegraphChat;
+use App\Telegram\IncomingHandler;
+use DefStudio\Telegraph\Models\TelegraphBot;
+use DefStudio\Telegraph\Storage\CacheStorageDriver;
+use DefStudio\Telegraph\Storage\FileStorageDriver;
 
 return [
     /*
@@ -30,7 +35,7 @@ return [
          *
          * For reference, see https://docs.defstudio.it/telegraph/webhooks/overview
          */
-        'handler' => \App\Telegram\IncomingHandler::class,
+        'handler' => IncomingHandler::class,
 
         /*
          * Middleware to be applied to the webhook route
@@ -114,8 +119,8 @@ return [
      * Chat model must be or extend `DefStudio\Telegraph\Models\TelegraphChat::class`
      */
     'models' => [
-        'bot' => DefStudio\Telegraph\Models\TelegraphBot::class,
-        'chat' => \App\Models\TelegraphChat::class,
+        'bot' => TelegraphBot::class,
+        'chat' => TelegraphChat::class,
     ],
 
     'storage' => [
@@ -130,7 +135,7 @@ return [
                  * Telegraph cache driver to be used, must implement
                  * DefStudio\Telegraph\Contracts\StorageDriver contract
                  */
-                'driver' => \DefStudio\Telegraph\Storage\FileStorageDriver::class,
+                'driver' => FileStorageDriver::class,
 
                 /*
                  * Laravel Storage disk to use. See /config/filesystems/disks for available disks
@@ -148,7 +153,7 @@ return [
                  * Telegraph cache driver to be used, must implement
                  * DefStudio\Telegraph\Contracts\StorageDriver contract
                  */
-                'driver' => \DefStudio\Telegraph\Storage\CacheStorageDriver::class,
+                'driver' => CacheStorageDriver::class,
 
                 /*
                  * Laravel Cache store to use. See /config/cache/stores for available stores
