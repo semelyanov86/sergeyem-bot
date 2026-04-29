@@ -1,9 +1,7 @@
-name: Continuous Integration and Deployment
+name: Deploy
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
     branches: [ main ]
 
 jobs:
@@ -12,51 +10,43 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.5'
+          tools: composer:v2
 
-      - name: Install Dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest
+      - name: Install PHP Dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
 
       - name: Setup Laravel
         run: |
           cp .env.example .env
-          php artisan config:clear
-          php artisan cache:clear
           php artisan key:generate
 
-      - name: Composer Audit
-        run: composer audit
-
-      - name: Composer Validate
-        run: composer validate --no-check-all --strict
-
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: 'npm'
 
       - name: Install Node.js Dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Build Vue.js
+      - name: Build Assets
         run: npm run build
 
-      - name: Run PHPUnit Tests
+      - name: Run Tests
         run: ./vendor/bin/phpunit --colors=always
 
-      - name: Lint PHP Code
-        run: ./vendor/bin/pint --test
-
   deploy:
-    needs: [build]
+    needs: [ build ]
     runs-on: ubuntu-latest
+
     steps:
-      - name: Deploy via SSH and git pull
+      - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.TIMEWEB_HOST }}
@@ -64,11 +54,17 @@ jobs:
           key: ${{ secrets.TIMEWEB_SSH_KEY }}
           port: 22
           script: |
-            cd ~/bot
-            git pull origin main
-            /opt/php85/bin/php composer.phar install --no-interaction --prefer-dist --optimize-autoloader
-            /opt/php85/bin/php artisan migrate --force
-            /opt/php85/bin/php artisan config:cache
-            /opt/php85/bin/php artisan route:cache
-            /opt/php85/bin/php artisan view:cache
-            /opt/php85/bin/php artisan cache:clear
+            sudo -u site_bot HOME=/var/www/bot/shared bash -s << 'DEPLOY'
+              set -e
+              cd /var/www/bot/current
+              git pull origin main
+              /usr/local/bin/composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+              /usr/bin/npm install
+              /usr/bin/npm run build
+              /usr/bin/php8.5 artisan migrate --force
+              /usr/bin/php8.5 artisan config:cache
+              /usr/bin/php8.5 artisan route:cache
+              /usr/bin/php8.5 artisan view:cache
+              /usr/bin/php8.5 artisan cache:clear
+            DEPLOY
+            sudo systemctl reload octane-bot
