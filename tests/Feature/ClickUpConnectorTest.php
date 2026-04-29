@@ -28,16 +28,31 @@ class ClickUpConnectorTest extends TestCase
 
         $result = resolve(ClickUpConnector::class)->getTask('abc123');
 
+        $this->assertNotNull($result);
         $this->assertSame('abc123', $result['id']);
         $this->assertSame('Test Task', $result['name']);
     }
 
-    public function test_get_task_throws_exception_on_error_direct(): void
+    public function test_get_task_returns_null_when_not_found_direct(): void
     {
         config(['services.clickup.proxy_url' => null]);
 
         Http::fake([
-            'api.clickup.com/api/v2/task/bad' => Http::response('Not Found', 404),
+            'api.clickup.com/api/v2/task/bad' => Http::response(
+                ['err' => 'Task not found, deleted', 'ECODE' => 'ITEM_013'],
+                404,
+            ),
+        ]);
+
+        $this->assertNull(resolve(ClickUpConnector::class)->getTask('bad'));
+    }
+
+    public function test_get_task_throws_exception_on_server_error_direct(): void
+    {
+        config(['services.clickup.proxy_url' => null]);
+
+        Http::fake([
+            'api.clickup.com/api/v2/task/bad' => Http::response('Internal Server Error', 500),
         ]);
 
         $this->expectException(\DomainException::class);
@@ -66,6 +81,7 @@ class ClickUpConnectorTest extends TestCase
 
         $result = resolve(ClickUpConnector::class)->getTask('abc123');
 
+        $this->assertNotNull($result);
         $this->assertSame('abc123', $result['id']);
         $this->assertSame('Proxied Task', $result['name']);
 
@@ -77,7 +93,7 @@ class ClickUpConnectorTest extends TestCase
                 && $request->header('X-Target-Token')[0] === 'pk_test_token');
     }
 
-    public function test_get_task_via_proxy_throws_exception_on_error(): void
+    public function test_get_task_via_proxy_returns_null_when_not_found(): void
     {
         config([
             'services.clickup.proxy_url' => 'https://proxy.example.com',
@@ -85,7 +101,24 @@ class ClickUpConnectorTest extends TestCase
         ]);
 
         Http::fake([
-            'proxy.example.com/proxy' => Http::response('Not Found', 404),
+            'proxy.example.com/proxy' => Http::response(
+                ['err' => 'Task not found, deleted', 'ECODE' => 'ITEM_013'],
+                404,
+            ),
+        ]);
+
+        $this->assertNull(resolve(ClickUpConnector::class)->getTask('bad'));
+    }
+
+    public function test_get_task_via_proxy_throws_exception_on_server_error(): void
+    {
+        config([
+            'services.clickup.proxy_url' => 'https://proxy.example.com',
+            'services.clickup.proxy_secret' => 'secret',
+        ]);
+
+        Http::fake([
+            'proxy.example.com/proxy' => Http::response('Internal Server Error', 500),
         ]);
 
         $this->expectException(\DomainException::class);

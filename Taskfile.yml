@@ -214,3 +214,7 @@ tasks:
   status:
     desc: "Check status of queue"
     cmd: "systemctl status laravel-parser"
+
+  ssh:
+    desc: "Connect to server via ssh"
+    cmd: "ssh sergey@bot.sergeyem.ru"

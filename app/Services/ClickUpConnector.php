@@ -11,17 +11,21 @@ use Illuminate\Http\Client\Response;
 final class ClickUpConnector
 {
     /**
-     * @return array<string, mixed>
+     * @return array<string, mixed>|null
      *
      * @throws ConnectionException
      */
-    public function getTask(string $taskId): array
+    public function getTask(string $taskId): ?array
     {
         /** @var string $baseUrl */
         $baseUrl = config('services.clickup.base_url');
         $targetUrl = $baseUrl . '/task/' . $taskId;
 
         $response = $this->sendRequest('GET', $targetUrl);
+
+        if ($response->notFound()) {
+            return null;
+        }
 
         if (! $response->ok()) {
             throw new \DomainException('Can not get ClickUp task: ' . $response->body());

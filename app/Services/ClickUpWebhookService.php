@@ -85,6 +85,11 @@ final readonly class ClickUpWebhookService
     private function fetchTask(string $taskId): ?ClickUpTaskData
     {
         $response = $this->connector->getTask($taskId);
+
+        if ($response === null) {
+            return null;
+        }
+
         $task = ClickUpTaskData::fromApiResponse($response);
 
         if (! $task->isAssignedTo(self::ASSIGNEE_EMAIL)) {

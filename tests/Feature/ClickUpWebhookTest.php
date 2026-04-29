@@ -156,6 +156,27 @@ class ClickUpWebhookTest extends TestCase
         Telegraph::assertNothingSent();
     }
 
+    public function test_task_event_skips_silently_when_task_deleted(): void
+    {
+        $this->createChat();
+        Telegraph::fake();
+
+        Http::fake([
+            'api.clickup.com/api/v2/task/abc123' => Http::response(
+                ['err' => 'Task not found, deleted', 'ECODE' => 'ITEM_013'],
+                404,
+            ),
+        ]);
+
+        $this->postJson('/webhooks/clickup', [
+            'event' => 'taskCreated',
+            'task_id' => 'abc123',
+            'history_items' => [],
+        ])->assertOk();
+
+        Telegraph::assertNothingSent();
+    }
+
     public function test_disabled_webhook_returns_403(): void
     {
         config(['services.clickup.webhook_enabled' => false]);
