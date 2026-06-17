@@ -46,7 +46,7 @@ final class TransactionDetailData extends Data
         public array $tags,
         public ?string $internal_reference,
         public ?string $external_id,
-        public string $original_source,
+        public ?string $original_source,
         public ?string $recurrence_id,
         public ?string $recurrence_total,
         public ?string $recurrence_count,
