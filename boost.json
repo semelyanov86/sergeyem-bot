@@ -3,14 +3,17 @@
         "junie",
         "claude_code"
     ],
+    "cloud": false,
     "guidelines": true,
-    "herd_mcp": false,
     "mcp": true,
+    "nightwatch": false,
     "packages": [
         "spatie/laravel-ray"
     ],
     "sail": false,
     "skills": [
+        "laravel-best-practices",
+        "octane-development",
         "inertia-vue-development",
         "tailwindcss-development",
         "debugging-output-and-previewing-html-using-ray"
