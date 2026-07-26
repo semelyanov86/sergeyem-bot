@@ -57,11 +57,19 @@ final readonly class TelegramReportSender
 
         $result = new TelegramReportResult($sent, $total - $sent, $total);
 
-        Log::info('Telegram report delivered: sent ' . $sent . ' of ' . $total, [
+        $summary = [
             'sent' => $result->sent,
             'failed' => $result->failed,
             'total' => $result->total,
-        ]);
+        ];
+
+        // Production runs at LOG_LEVEL=warning, so an incomplete delivery has to be
+        // reported above that threshold or the summary would never be written.
+        if ($result->failed > 0) {
+            Log::error('Telegram report incomplete: sent ' . $sent . ' of ' . $total, $summary);
+        } else {
+            Log::info('Telegram report delivered: sent ' . $sent . ' of ' . $total, $summary);
+        }
 
         return $result;
     }

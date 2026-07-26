@@ -172,7 +172,6 @@ class WebhookNotifyTest extends TestCase
         $errors = $this->recordsWithLevel($records, 'error');
 
         $this->assertCount(2, $warnings);
-        $this->assertCount(1, $errors);
 
         $this->assertSame([
             'chunk' => 1,
@@ -184,7 +183,11 @@ class WebhookNotifyTest extends TestCase
             'attempt' => 1,
         ], $warnings[0]->context);
 
+        // The abandoned chunk, then the summary — both above the production log level.
+        $this->assertCount(2, $errors);
         $this->assertSame(3, $errors[0]->context['attempt']);
+        $this->assertSame('Telegram report incomplete: sent 0 of 1', $errors[1]->message);
+        $this->assertSame(['sent' => 0, 'failed' => 1, 'total' => 1], $errors[1]->context);
     }
 
     public function test_rejects_invalid_token(): void
