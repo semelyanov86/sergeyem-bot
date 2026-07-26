@@ -4,34 +4,26 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Models\TelegraphChat;
+use App\Services\TelegramReportSender;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 final class WebhookNotifyController extends Controller
 {
-    private const int MAX_MESSAGE_LENGTH = 4000;
-
-    public function __invoke(Request $request): JsonResponse
+    public function __invoke(Request $request, TelegramReportSender $sender): JsonResponse
     {
         if ($request->bearerToken() !== config('services.webhook_notify.token')) {
             abort(403, 'Invalid token');
         }
 
-        $message = $request->getContent();
+        $report = $request->getContent();
 
-        if (empty($message)) {
+        if (empty($report)) {
             return response()->json(['error' => 'Empty message'], 422);
         }
 
-        $chat = TelegraphChat::firstOrFail();
+        $result = $sender->send($report);
 
-        $chunks = mb_str_split($message, self::MAX_MESSAGE_LENGTH);
-
-        foreach ($chunks as $chunk) {
-            $chat->message($chunk)->send();
-        }
-
-        return response()->json(['success' => 'ok']);
+        return response()->json($result->toArray(), $result->httpStatus());
     }
 }
