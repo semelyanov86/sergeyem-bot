@@ -262,7 +262,7 @@ class WebhookNotifyTest extends TestCase
         $paragraphs = [];
 
         for ($index = 0; $index < $count; $index++) {
-            $paragraphs[] = str_repeat(chr(ord('A') + $index), 2000);
+            $paragraphs[] = str_repeat(chr(ord('A') + $index % 26), 2000);
         }
 
         return implode("\n\n", $paragraphs);
