@@ -110,6 +110,12 @@ final class MainController extends Controller
             $msg .= 'Локация: ' . $payload['location'] . PHP_EOL;
         }
 
+        // Bookings are anonymous since 2026-09-09: the Meet link is the one thing
+        // worth having at hand when the meeting starts.
+        if (! empty($payload['meeting_link'])) {
+            $msg .= 'Google Meet: ' . $payload['meeting_link'] . PHP_EOL;
+        }
+
         $builderService->sendMessage($msg);
 
         return response()->noContent();
