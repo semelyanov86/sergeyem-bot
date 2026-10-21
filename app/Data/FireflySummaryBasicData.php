@@ -17,8 +17,8 @@ final class FireflySummaryBasicData extends Data
         public string $currency_symbol,
         public int $currency_decimal_places,
         public string $value_parsed,
-        public string $local_icon,
         public string $sub_title,
         public bool $no_available_budgets = false,
+        public ?string $local_icon = null,
     ) {}
 }
